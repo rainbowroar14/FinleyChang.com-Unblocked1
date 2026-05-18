@@ -826,7 +826,7 @@
       background: #fff;
       border: 3px solid #808080;
       padding: 12px;
-      max-width: 340px;
+      max-width: 380px;
       box-shadow: 2px 2px 0 #000;
     }
 
@@ -860,6 +860,28 @@
       display: block;
     }
 
+    .captcha-recheck-msg,
+    .robot-recheck-msg {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 12px;
+      color: #c00;
+      margin: 8px 0 0;
+      display: none;
+    }
+
+    .captcha-recheck-msg.show,
+    .robot-recheck-msg.show {
+      display: block;
+    }
+
+    .robot-box {
+      background: #fff;
+      border: 3px solid #808080;
+      padding: 12px;
+      max-width: 380px;
+      box-shadow: 2px 2px 0 #000;
+    }
+
     .captcha-loading {
       display: none;
       margin-top: 10px;
@@ -879,10 +901,93 @@
       margin-bottom: 8px;
     }
 
+    .captcha-load-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-top: 4px;
+    }
+
+    .captcha-load-bar-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+
     .captcha-load-bar {
       height: 14px;
       border: 2px solid #000;
       background: #fff;
+    }
+
+    .captcha-load-hose {
+      width: 28px;
+      height: 6px;
+      margin-left: -2px;
+      background: #333;
+      border: 2px solid #000;
+      border-left: none;
+      align-self: center;
+    }
+
+    .captcha-air-pump {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .captcha-pump-label {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 9px;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+
+    .captcha-pump-body {
+      width: 36px;
+      height: 10px;
+      background: #808080;
+      border: 2px solid #000;
+      border-radius: 0 0 4px 4px;
+    }
+
+    .captcha-pump-cylinder {
+      position: relative;
+      width: 28px;
+      height: 72px;
+      background: linear-gradient(90deg, #d0d0d0, #f0f0f0, #d0d0d0);
+      border: 2px solid #000;
+      border-radius: 4px;
+    }
+
+    .captcha-pump-handle {
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      height: 14px;
+      top: 54px;
+      background: #222;
+      border: 2px solid #000;
+      border-radius: 2px;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .captcha-pump-handle:active {
+      cursor: grabbing;
+    }
+
+    .captcha-air-pump.pumped .captcha-pump-cylinder {
+      background: linear-gradient(90deg, #b8e0b8, #e8ffe8, #b8e0b8);
+    }
+
+    .captcha-pump-hint {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 9px;
+      color: #404040;
+      margin-top: 6px;
     }
 
     .captcha-load-fill {
@@ -1119,6 +1224,74 @@
 
     .win-sub { margin-top: 12px; font-size: 16px; }
 
+    .future-question {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .future-think-outside {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 13px;
+      font-style: italic;
+      color: #808080;
+      margin-bottom: 8px;
+    }
+
+    .future-wrap {
+      border: 3px solid #000;
+      background: #e8e8e8;
+      padding: 8px;
+      margin: 12px 0;
+      box-shadow: 3px 3px 0 #808080;
+      overflow: visible;
+    }
+
+    .future-continue-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .future-answer {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 11px;
+      font-style: italic;
+      color: #808080;
+      margin: 0;
+      max-width: 220px;
+      line-height: 1.35;
+      user-select: none;
+    }
+
+    .future-answer.solved {
+      color: #006400;
+    }
+
+    #stick-canvas {
+      display: block;
+      width: 100%;
+      max-width: 640px;
+      height: auto;
+      background: #fff;
+      border: 2px inset #c0c0c0;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    #stick-canvas.ragdoll {
+      cursor: crosshair;
+    }
+
+    .future-hint {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 11px;
+      color: #404040;
+      margin-top: 6px;
+    }
+
     .win-clicker {
       margin: 24px auto;
       padding: 20px;
@@ -1322,13 +1495,27 @@
             </label>
             <div class="captcha-loading" id="captcha-loading">
               <p id="captcha-load-text">Verifying you are not a robot...</p>
-              <div class="captcha-load-bar"><div class="captcha-load-fill" id="captcha-load-fill"></div></div>
+              <div class="captcha-load-row">
+                <div class="captcha-load-bar-wrap">
+                  <div class="captcha-load-bar"><div class="captcha-load-fill" id="captcha-load-fill"></div></div>
+                </div>
+                <div class="captcha-load-hose" aria-hidden="true"></div>
+                <div class="captcha-air-pump" id="captcha-air-pump">
+                  <span class="captcha-pump-label">AIR PUMP</span>
+                  <div class="captcha-pump-body"></div>
+                  <div class="captcha-pump-cylinder" id="captcha-pump-cylinder">
+                    <div class="captcha-pump-handle" id="captcha-pump-handle" role="slider" aria-label="Pump handle"></div>
+                  </div>
+                </div>
+              </div>
+              <p class="captcha-pump-hint">Pump up and down to speed up verification.</p>
             </div>
             <div class="captcha-challenge" id="captcha-challenge">
               <p>Select all squares with <strong>PARROTS</strong>:</p>
               <div class="captcha-grid" id="captcha-grid"></div>
               <button type="button" class="win-btn primary" id="btn-captcha-verify">VERIFY</button>
             </div>
+            <p class="captcha-recheck-msg" id="captcha-recheck-msg"></p>
           </div>
           <button type="button" class="admin-skip" data-skip="captcha">SKIP (ADMIN USE ONLY)</button>
         </section>
@@ -1437,6 +1624,37 @@
           <button type="button" class="admin-skip" data-skip="quiz">SKIP (ADMIN USE ONLY)</button>
         </section>
 
+        <section id="screen-future" class="screen">
+          <span class="level-tag">LEVEL 8 — FUTURE</span>
+          <p class="future-question">Where do you see yourself in 10 years?</p>
+          <p class="future-think-outside">think outside the box</p>
+          <div class="future-wrap">
+            <canvas id="stick-canvas" width="640" height="320"></canvas>
+            <p class="future-hint" id="stick-hint">Drag the stickman to your answer.</p>
+          </div>
+          <div class="btn-row future-continue-row">
+            <button type="button" class="win-btn primary" id="btn-future-continue" disabled>CONTINUE →</button>
+            <p class="future-answer" id="future-answer">(I cant see myself in 10 years)</p>
+          </div>
+          <button type="button" class="admin-skip" data-skip="future">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
+        <section id="screen-robot" class="screen">
+          <span class="level-tag">LEVEL 9 — ROBOT CHECK</span>
+          <p class="level-desc">Final identity confirmation before HR continues your file.</p>
+          <div class="robot-box">
+            <label class="captcha-check-row" for="robot-checkbox">
+              <input type="checkbox" id="robot-checkbox">
+              <span>I am a robot</span>
+            </label>
+            <p class="robot-recheck-msg" id="robot-recheck-msg"></p>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="win-btn primary" id="btn-robot-next">NEXT →</button>
+          </div>
+          <button type="button" class="admin-skip" data-skip="robot">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
         <section id="screen-win" class="screen win-screen">
           <h2>YOU WIN</h2>
           <p class="win-sub" id="win-message">You are provisionally employable.</p>
@@ -1526,6 +1744,7 @@
     const CAPTCHA_LOAD_STALL_PCT = 90;
     const CAPTCHA_LOAD_FAST_MS = 2200;
     const CAPTCHA_LOAD_SLOW_MS = 30000;
+    const CAPTCHA_PUMP_STROKE_MS = 3000;
 
     const QUIZ_MAX_STRIKES = 3;
     const QUIZ_SHOWN_TOTAL = 7;
@@ -1540,9 +1759,9 @@
       },
       { name: "Your Name", type: "text", prompt: "Type in your name:", match: "applicantName" },
       {
-        name: "Stage Four",
+        name: "Level Four",
         type: "choice",
-        prompt: "What was stage 4?",
+        prompt: "What was level 4?",
         options: ["Memory Screening", "reCAPTCHA", "Essay", "Luck Audit"],
         answer: 0
       },
@@ -1639,6 +1858,8 @@
       slots: document.getElementById("screen-slots"),
       pong: document.getElementById("screen-pong"),
       quiz: document.getElementById("screen-quiz"),
+      future: document.getElementById("screen-future"),
+      robot: document.getElementById("screen-robot"),
       win: document.getElementById("screen-win")
     };
 
@@ -1680,6 +1901,8 @@
       slots: "luck_audit_slots_lvl5.exe",
       pong: "reflex_interview_lvl6.exe",
       quiz: "the_quiz_lvl7.exe",
+      future: "orientation_future_lvl8.exe",
+      robot: "robot_check_lvl9.exe",
       win: "YOU_WIN.bmp"
     };
 
@@ -1687,12 +1910,24 @@
     let captchaSelected = new Set();
     let captchaLoadTimer = null;
     let captchaLoadRaf = null;
+    let captchaLoadVirtualElapsed = 0;
+    let captchaPumpDragging = false;
+    let captchaPumpVisitedTop = false;
+    let captchaPumpStrokes = 0;
+    let captchaPumpFlashUntil = 0;
     const captchaCheckbox = document.getElementById("captcha-checkbox");
     const captchaChallenge = document.getElementById("captcha-challenge");
     const captchaLoading = document.getElementById("captcha-loading");
     const captchaLoadFill = document.getElementById("captcha-load-fill");
     const captchaLoadText = document.getElementById("captcha-load-text");
     const captchaGrid = document.getElementById("captcha-grid");
+    const captchaPumpCylinder = document.getElementById("captcha-pump-cylinder");
+    const captchaPumpHandle = document.getElementById("captcha-pump-handle");
+    const captchaAirPump = document.getElementById("captcha-air-pump");
+    const captchaRecheckMsg = document.getElementById("captcha-recheck-msg");
+    const robotCheckbox = document.getElementById("robot-checkbox");
+    const robotRecheckMsg = document.getElementById("robot-recheck-msg");
+    const btnRobotNext = document.getElementById("btn-robot-next");
 
     let quizIndex = 0;
     let quizWrong = 0;
@@ -1746,10 +1981,12 @@
 
     function showScreen(name) {
       if (name !== "pong") stopPong();
+      if (name !== "future") stopStickman();
       Object.values(screens).forEach((el) => el.classList.remove("active"));
       screens[name].classList.add("active");
       windowTitle.textContent = titles[name] || titles.intro;
       if (name === "pong") preparePongScreen();
+      if (name === "future") startStickmanLevel();
     }
 
     function getAudio() {
@@ -1776,10 +2013,12 @@
       adminModeActive = false;
       adminPasswordOk = false;
       resetClicker();
+      stopStickman();
       updateAdminSkipUI();
       resetLevel0();
       resetSignageLevel();
       resetCaptchaLevel();
+      resetRobotLevel();
       resetEssayLevel();
       resetMemoryLevel();
       resetSlotsLevel();
@@ -1796,6 +2035,7 @@
     }
 
     function showFail(reason) {
+      stopStickman();
       memoryInputEnabled = false;
       memoryPlaying = false;
       slotSpinning = false;
@@ -2085,6 +2325,67 @@
       });
     }
 
+    function getPumpBounds() {
+      const cylH = captchaPumpCylinder.clientHeight || 72;
+      const handleH = captchaPumpHandle.offsetHeight || 14;
+      return { min: 4, max: cylH - handleH - 4 };
+    }
+
+    function setPumpHandleTop(px) {
+      const { min, max } = getPumpBounds();
+      const top = Math.max(min, Math.min(max, px));
+      captchaPumpHandle.style.top = `${top}px`;
+      if (!captchaLoading.classList.contains("show")) return;
+      if (top <= min + 6) captchaPumpVisitedTop = true;
+      if (captchaPumpVisitedTop && top >= max - 6) {
+        captchaPumpVisitedTop = false;
+        captchaLoadVirtualElapsed += CAPTCHA_PUMP_STROKE_MS;
+        captchaPumpStrokes += 1;
+        captchaPumpFlashUntil = performance.now() + 450;
+        captchaAirPump.classList.add("pumped");
+        setTimeout(() => captchaAirPump.classList.remove("pumped"), 200);
+      }
+    }
+
+    function resetCaptchaPump() {
+      captchaPumpDragging = false;
+      captchaPumpVisitedTop = false;
+      captchaPumpStrokes = 0;
+      captchaPumpFlashUntil = 0;
+      const { max } = getPumpBounds();
+      captchaPumpHandle.style.top = `${max}px`;
+    }
+
+    function bindCaptchaAirPump() {
+      let pumpPointerId = null;
+      const onMove = (e) => {
+        if (!captchaPumpDragging) return;
+        const rect = captchaPumpCylinder.getBoundingClientRect();
+        const handleH = captchaPumpHandle.offsetHeight;
+        setPumpHandleTop(e.clientY - rect.top - handleH / 2);
+      };
+      const endDrag = (e) => {
+        if (pumpPointerId !== null) {
+          try {
+            captchaPumpHandle.releasePointerCapture(pumpPointerId);
+          } catch (_) { /* already released */ }
+          pumpPointerId = null;
+        }
+        captchaPumpDragging = false;
+      };
+      captchaPumpHandle.addEventListener("pointerdown", (e) => {
+        if (!captchaLoading.classList.contains("show")) return;
+        e.preventDefault();
+        captchaPumpDragging = true;
+        pumpPointerId = e.pointerId;
+        captchaPumpHandle.setPointerCapture(e.pointerId);
+        onMove(e);
+      });
+      captchaPumpHandle.addEventListener("pointermove", onMove);
+      captchaPumpHandle.addEventListener("pointerup", endDrag);
+      captchaPumpHandle.addEventListener("pointercancel", endDrag);
+    }
+
     function clearCaptchaLoadTimer() {
       if (captchaLoadTimer) {
         clearTimeout(captchaLoadTimer);
@@ -2094,19 +2395,21 @@
         cancelAnimationFrame(captchaLoadRaf);
         captchaLoadRaf = null;
       }
+      resetCaptchaPump();
     }
 
     function startCaptchaLoadSequence() {
       clearCaptchaLoadTimer();
       captchaChallenge.classList.remove("show");
       captchaLoading.classList.add("show");
+      resetCaptchaPump();
       captchaLoadFill.style.transition = "none";
       captchaLoadFill.style.width = "0%";
-      const loadStart = performance.now();
+      captchaLoadVirtualElapsed = 0;
       const totalMs = CAPTCHA_LOAD_FAST_MS + CAPTCHA_LOAD_SLOW_MS;
 
-      const tick = (now) => {
-        const elapsed = now - loadStart;
+      const tick = () => {
+        const elapsed = captchaLoadVirtualElapsed;
         let pct;
         if (elapsed < CAPTCHA_LOAD_FAST_MS) {
           pct = (elapsed / CAPTCHA_LOAD_FAST_MS) * CAPTCHA_LOAD_STALL_PCT;
@@ -2124,20 +2427,49 @@
           return;
         }
         captchaLoadFill.style.width = `${pct}%`;
-        captchaLoadText.textContent = `Verifying you are not a robot... ${Math.floor(pct)}%`;
+        captchaLoadText.textContent =
+          pct <= 0
+            ? "Verifying you are not a robot... use the air pump."
+            : `Verifying you are not a robot... ${Math.floor(pct)}%`;
         captchaLoadRaf = requestAnimationFrame(tick);
       };
       captchaLoadRaf = requestAnimationFrame(tick);
     }
 
-    function resetCaptchaLevel() {
+    function resetRobotLevel() {
+      if (robotCheckbox) robotCheckbox.checked = false;
+      if (robotRecheckMsg) {
+        robotRecheckMsg.classList.remove("show");
+        robotRecheckMsg.textContent = "";
+      }
+    }
+
+    function goToRobot() {
+      resetRobotLevel();
+      showScreen("robot");
+    }
+
+    function restartCaptchaVerification(clearRecheckMsg = false) {
+      if (clearRecheckMsg) {
+        captchaRecheckMsg.classList.remove("show");
+        captchaRecheckMsg.textContent = "";
+      }
       clearCaptchaLoadTimer();
       captchaCheckbox.checked = false;
       captchaChallenge.classList.remove("show");
       captchaLoading.classList.remove("show");
       captchaLoadFill.style.width = "0%";
       captchaSelected.clear();
+      captchaGrid.querySelectorAll(".captcha-tile").forEach((t) => {
+        t.classList.remove("selected");
+      });
     }
+
+    function resetCaptchaLevel() {
+      restartCaptchaVerification(true);
+    }
+
+    bindCaptchaAirPump();
 
     captchaCheckbox.addEventListener("change", () => {
       if (captchaCheckbox.checked) {
@@ -2172,6 +2504,19 @@
       }
       resetEssayLevel();
       showScreen("essay");
+    });
+
+    btnRobotNext.addEventListener("click", () => {
+      robotRecheckMsg.textContent = "We must check if your not a robot again.";
+      robotRecheckMsg.classList.add("show");
+      setTimeout(() => goToWin(), 1400);
+    });
+
+    robotCheckbox.addEventListener("change", () => {
+      if (robotCheckbox.checked) {
+        robotCheckbox.checked = false;
+        showFail('You checked "I am a robot." That is an automatic rejection.');
+      }
     });
 
     essayInput.addEventListener("input", updateEssayWordCount);
@@ -2888,7 +3233,7 @@
     function advanceQuizAfterFeedback() {
       quizAdvancing = false;
       if (quizIndex >= QUIZ_QUESTIONS.length) {
-        goToWin();
+        goToFuture();
         return;
       }
       renderQuizQuestion();
@@ -3183,13 +3528,443 @@
       clickerCountEl.textContent = String(clickerCount);
     });
 
+    function goToFuture() {
+      showScreen("future");
+    }
+
     function goToWin() {
+      stopStickman();
       const msg = playerName
         ? `${playerName}, you are provisionally employable.`
         : "You are provisionally employable.";
       document.getElementById("win-message").textContent = msg;
       showScreen("win");
     }
+
+  /* ——— Level 8 — think outside the box ——— */
+    const stickCanvas = document.getElementById("stick-canvas");
+    const stickCtx = stickCanvas.getContext("2d");
+    const stickHintEl = document.getElementById("stick-hint");
+    const btnFutureContinue = document.getElementById("btn-future-continue");
+    const futureAnswerEl = document.getElementById("future-answer");
+
+    const STICK_SCENE = {
+      box: { x: 24, y: 48, w: 592, h: 232 },
+      money: { x: 0, y: 0, w: 0, h: 0 },
+      desk: { x: 0, y: 0, w: 0, h: 0 },
+      grave: { x: 0, y: 0, w: 0, h: 0 }
+    };
+
+    function stickUpdateSceneLayout() {
+      const b = STICK_SCENE.box;
+      STICK_SCENE.grave = { x: b.x + 8, y: b.y + 8, w: 48, h: 56 };
+      STICK_SCENE.money = { x: b.x + 10, y: b.y + b.h - 46, w: 78, h: 40 };
+      STICK_SCENE.desk = { x: b.x + b.w - 96, y: b.y - 14, w: 92, h: 92 };
+    }
+
+    const STICK_CONSTRAINTS = [
+      [0, 1], [1, 2], [1, 3], [1, 4],
+      [3, 5], [5, 7], [4, 6], [6, 8],
+      [2, 9], [9, 11], [2, 10], [10, 12]
+    ];
+
+    const stick = {
+      w: 640,
+      h: 320,
+      points: [],
+      restLen: [],
+      ragdoll: false,
+      solved: false,
+      dragIdx: -1,
+      animId: null,
+      lastMx: 0,
+      lastMy: 0,
+      startMx: 0,
+      startMy: 0
+    };
+
+    function stickMakePoint(x, y) {
+      return { x, y, px: x, py: y, vx: 0, vy: 0, invMass: 1 };
+    }
+
+    function stickBuildRestLengths() {
+      stick.restLen = STICK_CONSTRAINTS.map(([a, b]) => {
+        const pa = stick.points[a];
+        const pb = stick.points[b];
+        return Math.hypot(pb.x - pa.x, pb.y - pa.y);
+      });
+    }
+
+    function stickResetPose() {
+      stickUpdateSceneLayout();
+      const b = STICK_SCENE.box;
+      const cx = b.x + b.w / 2;
+      const floor = b.y + b.h - 32;
+      stick.points = [
+        stickMakePoint(cx, b.y + 72),
+        stickMakePoint(cx, b.y + 108),
+        stickMakePoint(cx, b.y + 178),
+        stickMakePoint(cx - 42, b.y + 112),
+        stickMakePoint(cx + 42, b.y + 112),
+        stickMakePoint(cx - 68, b.y + 152),
+        stickMakePoint(cx + 68, b.y + 152),
+        stickMakePoint(cx - 88, b.y + 190),
+        stickMakePoint(cx + 88, b.y + 190),
+        stickMakePoint(cx - 28, b.y + 212),
+        stickMakePoint(cx + 28, b.y + 212),
+        stickMakePoint(cx - 34, floor),
+        stickMakePoint(cx + 34, floor)
+      ];
+      stick.ragdoll = false;
+      stick.solved = false;
+      stick.dragIdx = -1;
+      stickCanvas.classList.remove("ragdoll");
+      stickBuildRestLengths();
+      if (stickHintEl) {
+        stickHintEl.textContent = "Drag the stickman to your answer.";
+      }
+      if (btnFutureContinue) btnFutureContinue.disabled = true;
+      if (futureAnswerEl) futureAnswerEl.classList.remove("solved");
+    }
+
+    function stickDrawMoney(x, y) {
+      for (let i = 0; i < 5; i++) {
+        const ox = (i % 3) * 14;
+        const oy = Math.floor(i / 3) * 10;
+        stickCtx.fillStyle = i % 2 ? "#6b9e6b" : "#8fcf8f";
+        stickCtx.fillRect(x + ox, y - oy, 38, 18);
+        stickCtx.strokeStyle = "#000";
+        stickCtx.lineWidth = 2;
+        stickCtx.strokeRect(x + ox, y - oy, 38, 18);
+        stickCtx.fillStyle = "#000";
+        stickCtx.font = "bold 11px Tahoma, sans-serif";
+        stickCtx.fillText("$", x + ox + 14, y - oy + 13);
+      }
+    }
+
+    function stickDrawDesk(x, y) {
+      stickCtx.fillStyle = "#8b5a2b";
+      stickCtx.fillRect(x, y + 28, 88, 10);
+      stickCtx.fillRect(x + 6, y + 38, 8, 22);
+      stickCtx.fillRect(x + 74, y + 38, 8, 22);
+      stickCtx.fillStyle = "#a07040";
+      stickCtx.fillRect(x, y, 88, 30);
+      stickCtx.strokeStyle = "#000";
+      stickCtx.lineWidth = 2;
+      stickCtx.strokeRect(x, y, 88, 30);
+      stickCtx.fillStyle = "#fff";
+      stickCtx.fillRect(x + 14, y - 22, 60, 20);
+      stickCtx.strokeRect(x + 14, y - 22, 60, 20);
+      stickCtx.fillStyle = "#000";
+      stickCtx.font = "bold 12px Tahoma, sans-serif";
+      stickCtx.fillText("BOSS", x + 26, y - 8);
+    }
+
+    function stickDrawGrave(x, y) {
+      stickCtx.fillStyle = "#707070";
+      stickCtx.beginPath();
+      stickCtx.arc(x + 22, y + 14, 20, Math.PI, 0);
+      stickCtx.lineTo(x + 42, y + 52);
+      stickCtx.lineTo(x + 2, y + 52);
+      stickCtx.closePath();
+      stickCtx.fill();
+      stickCtx.strokeStyle = "#000";
+      stickCtx.lineWidth = 2;
+      stickCtx.stroke();
+      stickCtx.fillStyle = "#000";
+      stickCtx.font = "bold 10px Tahoma, sans-serif";
+      stickCtx.fillText("RIP", x + 14, y + 38);
+    }
+
+    function stickDrawScene() {
+      const { box } = STICK_SCENE;
+      stickUpdateSceneLayout();
+      stickCtx.fillStyle = "#fff";
+      stickCtx.fillRect(0, 0, stick.w, stick.h);
+
+      stickCtx.fillStyle = "#f0f0f0";
+      stickCtx.fillRect(box.x, box.y, box.w, box.h);
+
+      stickDrawGrave(STICK_SCENE.grave.x, STICK_SCENE.grave.y);
+      stickDrawMoney(STICK_SCENE.money.x, STICK_SCENE.money.y);
+      stickDrawDesk(STICK_SCENE.desk.x, STICK_SCENE.desk.y);
+
+      stickCtx.strokeStyle = "#000";
+      stickCtx.lineWidth = 2;
+      stickCtx.setLineDash([8, 5]);
+      stickCtx.strokeRect(box.x, box.y, box.w, box.h);
+      stickCtx.setLineDash([]);
+    }
+
+    function stickHeadScreenPos() {
+      const head = stick.points[0];
+      const rect = stickCanvas.getBoundingClientRect();
+      return {
+        x: rect.left + (head.x / stick.w) * rect.width,
+        y: rect.top + (head.y / stick.h) * rect.height
+      };
+    }
+
+    function stickHeadInRect(r, pad = 14) {
+      const head = stick.points[0];
+      return (
+        head.x >= r.x - pad &&
+        head.x <= r.x + r.w + pad &&
+        head.y >= r.y - pad &&
+        head.y <= r.y + r.h + pad
+      );
+    }
+
+    function stickHeadOutsideBox() {
+      const head = stick.points[0];
+      const b = STICK_SCENE.box;
+      const pad = 18;
+      return (
+        head.x < b.x - pad ||
+        head.x > b.x + b.w + pad ||
+        head.y < b.y - pad ||
+        head.y > b.y + b.h + pad
+      );
+    }
+
+    function stickHeadAtAnswer() {
+      if (!futureAnswerEl) return false;
+      const head = stickHeadScreenPos();
+      const rect = futureAnswerEl.getBoundingClientRect();
+      const pad = 24;
+      return (
+        head.x >= rect.left - pad &&
+        head.x <= rect.right + pad &&
+        head.y >= rect.top - pad &&
+        head.y <= rect.bottom + pad
+      );
+    }
+
+    function stickGetTrapHit() {
+      if (stickHeadInRect(STICK_SCENE.grave, 12)) {
+        return "You picked the grave. HR will remember that.";
+      }
+      if (stickHeadInRect(STICK_SCENE.money, 12)) {
+        return "You picked the money pile. HR will remember that.";
+      }
+      if (stickHeadInRect(STICK_SCENE.desk, 12)) {
+        return "You picked the boss desk. HR will remember that.";
+      }
+      return null;
+    }
+
+    function stickTryTrap() {
+      if (stick.solved || failLayer.classList.contains("show")) return;
+      const trap = stickGetTrapHit();
+      if (!trap) return;
+      showFail(trap);
+    }
+
+    function stickTryWin() {
+      if (stick.solved) return;
+      if (!stickHeadOutsideBox() || !stickHeadAtAnswer()) return;
+      stick.solved = true;
+      if (stickHintEl) {
+        stickHintEl.textContent = "Correct — you thought outside the box.";
+      }
+      if (btnFutureContinue) btnFutureContinue.disabled = false;
+      if (futureAnswerEl) futureAnswerEl.classList.add("solved");
+    }
+
+    function stickCanvasPos(e) {
+      const rect = stickCanvas.getBoundingClientRect();
+      const scaleX = stick.w / rect.width;
+      const scaleY = stick.h / rect.height;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    function stickHitTest(x, y) {
+      let best = -1;
+      let bestD = 22;
+      stick.points.forEach((p, i) => {
+        const d = Math.hypot(p.x - x, p.y - y);
+        if (d < bestD) {
+          bestD = d;
+          best = i;
+        }
+      });
+      STICK_CONSTRAINTS.forEach(([a, b]) => {
+        const pa = stick.points[a];
+        const pb = stick.points[b];
+        const dx = pb.x - pa.x;
+        const dy = pb.y - pa.y;
+        const lenSq = dx * dx + dy * dy;
+        let t = 0;
+        if (lenSq > 0) t = Math.max(0, Math.min(1, ((x - pa.x) * dx + (y - pa.y) * dy) / lenSq));
+        const px = pa.x + t * dx;
+        const py = pa.y + t * dy;
+        const d = Math.hypot(x - px, y - py);
+        if (d < bestD) {
+          bestD = d;
+          best = a;
+        }
+      });
+      return best;
+    }
+
+    function stickSolveConstraints(iterations) {
+      for (let n = 0; n < iterations; n++) {
+        STICK_CONSTRAINTS.forEach(([a, b], i) => {
+          const pa = stick.points[a];
+          const pb = stick.points[b];
+          const dx = pb.x - pa.x;
+          const dy = pb.y - pa.y;
+          const dist = Math.hypot(dx, dy) || 0.001;
+          const rest = stick.restLen[i];
+          const diff = (dist - rest) / dist;
+          const offX = dx * diff * 0.5;
+          const offY = dy * diff * 0.5;
+          const ma = pa.invMass;
+          const mb = pb.invMass;
+          const total = ma + mb;
+          if (total <= 0) return;
+          pa.x += offX * (mb / total);
+          pa.y += offY * (mb / total);
+          pb.x -= offX * (ma / total);
+          pb.y -= offY * (ma / total);
+        });
+      }
+    }
+
+    function stickPhysics() {
+      const floor = stick.h - 8;
+      const gravity = stick.ragdoll ? 0.55 : 0;
+      stick.points.forEach((p, i) => {
+        if (stick.dragIdx === i) return;
+        if (!stick.ragdoll) return;
+        p.vy += gravity;
+        p.vx *= 0.995;
+        p.vy *= 0.995;
+        p.px = p.x;
+        p.py = p.y;
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y > floor) {
+          p.y = floor;
+          p.vy *= -0.35;
+          p.vx *= 0.92;
+        }
+        if (p.x < 8) {
+          p.x = 8;
+          p.vx *= -0.5;
+        }
+        if (p.x > stick.w - 8) {
+          p.x = stick.w - 8;
+          p.vx *= -0.5;
+        }
+        if (p.y < 8) {
+          p.y = 8;
+          p.vy *= -0.4;
+        }
+      });
+      stickSolveConstraints(10);
+    }
+
+    function stickDraw() {
+      stickDrawScene();
+      stickCtx.strokeStyle = "#000";
+      stickCtx.fillStyle = "#000";
+      stickCtx.lineWidth = 5;
+      stickCtx.lineCap = "round";
+      STICK_CONSTRAINTS.forEach(([a, b]) => {
+        const pa = stick.points[a];
+        const pb = stick.points[b];
+        stickCtx.beginPath();
+        stickCtx.moveTo(pa.x, pa.y);
+        stickCtx.lineTo(pb.x, pb.y);
+        stickCtx.stroke();
+      });
+      const head = stick.points[0];
+      stickCtx.beginPath();
+      stickCtx.arc(head.x, head.y, 16, 0, Math.PI * 2);
+      stickCtx.fill();
+    }
+
+    function stickLoop() {
+      stickPhysics();
+      stickDraw();
+      stickTryTrap();
+      stickTryWin();
+      stick.animId = requestAnimationFrame(stickLoop);
+    }
+
+    function startStickmanLevel() {
+      stopStickman();
+      stickResetPose();
+      stickDraw();
+      stick.animId = requestAnimationFrame(stickLoop);
+    }
+
+    function stopStickman() {
+      if (stick.animId) {
+        cancelAnimationFrame(stick.animId);
+        stick.animId = null;
+      }
+      stick.dragIdx = -1;
+    }
+
+    let stickPointerDown = false;
+
+    function stickOnPointerDown(e) {
+      e.preventDefault();
+      const pos = stickCanvasPos(e);
+      const hit = stickHitTest(pos.x, pos.y);
+      if (hit < 0) return;
+      stickPointerDown = true;
+      stick.dragIdx = hit;
+      stick.lastMx = pos.x;
+      stick.lastMy = pos.y;
+      window.addEventListener("pointermove", stickOnPointerMove);
+      window.addEventListener("pointerup", stickOnPointerUp);
+      window.addEventListener("pointercancel", stickOnPointerUp);
+    }
+
+    function stickOnPointerMove(e) {
+      if (!stickPointerDown || stick.dragIdx < 0) return;
+      e.preventDefault();
+      const pos = stickCanvasPos(e);
+      const p = stick.points[stick.dragIdx];
+      p.x = pos.x;
+      p.y = pos.y;
+      p.vx = 0;
+      p.vy = 0;
+      stickSolveConstraints(6);
+      stick.lastMx = pos.x;
+      stick.lastMy = pos.y;
+      stickTryTrap();
+      stickTryWin();
+    }
+
+    function stickOnPointerUp() {
+      if (!stickPointerDown) return;
+      stickPointerDown = false;
+      stick.dragIdx = -1;
+      window.removeEventListener("pointermove", stickOnPointerMove);
+      window.removeEventListener("pointerup", stickOnPointerUp);
+      window.removeEventListener("pointercancel", stickOnPointerUp);
+      stickTryTrap();
+      stickTryWin();
+    }
+
+    stickCanvas.addEventListener("pointerdown", stickOnPointerDown);
+
+    btnFutureContinue.addEventListener("click", () => {
+      if (!stick.solved) {
+        showFail("Think outside the box — drag yourself to the right answer.");
+        return;
+      }
+      goToRobot();
+    });
 
     function updateAdminSkipUI() {
       document.querySelectorAll(".admin-skip").forEach((btn) => {
@@ -3242,6 +4017,10 @@
         } else if (target === "pong") {
           goToQuiz();
         } else if (target === "quiz") {
+          goToFuture();
+        } else if (target === "future") {
+          goToRobot();
+        } else if (target === "robot") {
           goToWin();
         }
         });

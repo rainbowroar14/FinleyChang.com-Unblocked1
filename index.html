@@ -1,0 +1,3273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Job Application</title>
+  <style>
+    @font-face {
+      font-family: "Pixel MS";
+      src: local("MS Sans Serif"), local("Microsoft Sans Serif"), local("Tahoma");
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Comic Sans MS", "Comic Sans", cursive;
+      background: #008080;
+      color: #000;
+      overflow-x: hidden;
+    }
+
+    .desktop {
+      min-height: 100vh;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .window {
+      width: min(920px, 96vw);
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #fff #808080 #808080 #fff;
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    .title-bar {
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: #fff;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 3px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title-bar .buttons { display: flex; gap: 2px; }
+
+    .title-btn {
+      width: 16px;
+      height: 14px;
+      background: #c0c0c0;
+      border: 2px solid;
+      border-color: #fff #000 #000 #fff;
+      font-size: 9px;
+      line-height: 10px;
+      text-align: center;
+      color: #000;
+    }
+
+    .window-body { padding: 14px; }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .level-tag {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 11px;
+      margin-bottom: 8px;
+      background: #ffff00;
+      display: inline-block;
+      padding: 2px 6px;
+      border: 2px solid #000;
+    }
+
+    .level-desc {
+      font-size: 13px;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .intro-art {
+      border: 3px solid #000;
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+
+    .intro-banner {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .briefcase {
+      width: 64px;
+      height: 48px;
+      background: #8b4513;
+      border: 3px solid #000;
+      position: relative;
+    }
+
+    .briefcase::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      width: 40px;
+      height: 14px;
+      border: 3px solid #000;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .briefcase::after {
+      content: "";
+      position: absolute;
+      top: 18px;
+      left: 8px;
+      width: 48px;
+      height: 8px;
+      background: #ffd700;
+      border: 2px solid #000;
+    }
+
+    h1 {
+      font-size: clamp(22px, 5vw, 34px);
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .tagline { margin-top: 8px; font-size: 15px; line-height: 1.35; }
+
+    .corp-stamp {
+      margin-top: 10px;
+      display: inline-block;
+      padding: 4px 10px;
+      border: 3px double #c00;
+      color: #c00;
+      font-weight: bold;
+      transform: rotate(-4deg);
+      font-size: 13px;
+    }
+
+    .paint-note { margin-top: 10px; font-size: 12px; color: #404040; }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .win-btn {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 13px;
+      padding: 6px 18px;
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #fff #000 #000 #fff;
+      cursor: pointer;
+      min-width: 100px;
+    }
+
+    .win-btn:active {
+      border-color: #000 #fff #fff #000;
+      padding: 7px 17px 5px 19px;
+    }
+
+    .win-btn.primary { font-weight: bold; }
+
+    .win-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    /* Level 0 form */
+    .hr-form {
+      background: #fff;
+      border: 3px inset #808080;
+      padding: 12px;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+    }
+
+    .form-row {
+      margin-bottom: 12px;
+    }
+
+    .form-row label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .form-row input {
+      width: 100%;
+      max-width: 320px;
+      padding: 6px 8px;
+      border: 2px inset #808080;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .form-hint {
+      font-size: 10px;
+      color: #404040;
+      margin-top: 3px;
+    }
+
+    /* Level 1 signage */
+    .document {
+      background: #fffff0;
+      border: 3px inset #808080;
+      min-height: 200px;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .word-cloud {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 11px;
+      line-height: 1.55;
+      word-spacing: 0.35em;
+      user-select: none;
+    }
+
+    .sign-zone {
+      margin-top: 10px;
+      background: #e8e8e0;
+      border: 3px solid #000;
+      padding: 8px 10px 10px;
+    }
+
+    .sign-here-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .sign-line-mark {
+      flex: 1;
+      border-bottom: 3px solid #000;
+      min-width: 120px;
+      height: 0;
+    }
+
+    .sig-canvas-wrap {
+      border: 3px inset #808080;
+      background: #fff;
+      touch-action: none;
+    }
+
+    #signature-canvas {
+      display: block;
+      width: 100%;
+      height: 100px;
+      cursor: crosshair;
+      image-rendering: pixelated;
+    }
+
+    .sign-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .ink-block {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-label {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .color-row { display: flex; gap: 6px; }
+
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border: 3px solid #000;
+      cursor: pointer;
+    }
+
+    .color-swatch.selected {
+      outline: 3px solid #000080;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #fff inset;
+    }
+
+    .color-swatch[data-color="#cc0000"].selected {
+      outline-color: #ff0;
+    }
+
+    .color-swatch[data-color="#000000"].selected {
+      outline-color: #ff0;
+    }
+
+    /* Level 2 essay */
+    .essay-prompt {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 13px;
+      font-weight: bold;
+      background: #fff;
+      border: 2px solid #000;
+      padding: 8px;
+      margin-bottom: 8px;
+    }
+
+    #essay-input {
+      width: 100%;
+      min-height: 220px;
+      padding: 10px;
+      border: 3px inset #808080;
+      background: #fff;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    .essay-requirement {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 11px;
+      font-style: italic;
+      color: #404040;
+      margin-bottom: 6px;
+    }
+
+    .essay-word-footer {
+      margin-top: 8px;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 13px;
+      padding: 6px 8px;
+      background: #000;
+      color: #0f0;
+      border: 2px inset #808080;
+    }
+
+    .essay-word-footer .count-num {
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    /* Level 3 memory */
+    .memory-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .memory-device {
+      width: min(340px, 92vw);
+      background: #1a1a1a;
+      border: 5px solid #000;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow:
+        inset 0 0 0 3px #333,
+        4px 4px 0 #000;
+      image-rendering: pixelated;
+    }
+
+    .memory-brand {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 9px;
+      color: #888;
+      text-align: center;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      position: relative;
+    }
+
+    .mem-pad {
+      aspect-ratio: 1;
+      border: 4px solid #000;
+      cursor: pointer;
+      position: relative;
+      image-rendering: pixelated;
+      transition: none;
+    }
+
+    .mem-pad::after {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 2px dashed rgba(0,0,0,0.15);
+      pointer-events: none;
+    }
+
+    .mem-pad.red { background: #e52521; }
+    .mem-pad.green { background: #1fcb3c; }
+    .mem-pad.blue { background: #2460e5; }
+    .mem-pad.yellow { background: #f5d800; }
+
+    .mem-pad.lit.red { background: #ff6b68; box-shadow: 0 0 24px #ff0000, inset 0 0 20px #fff; }
+    .mem-pad.lit.green { background: #6dff85; box-shadow: 0 0 24px #0f0, inset 0 0 20px #fff; }
+    .mem-pad.lit.blue { background: #6b9fff; box-shadow: 0 0 24px #08f, inset 0 0 20px #fff; }
+    .mem-pad.lit.yellow { background: #fff566; box-shadow: 0 0 24px #ff0, inset 0 0 20px #fff; }
+
+    .mem-pad:active:not(:disabled) {
+      filter: brightness(1.2);
+    }
+
+    .mem-pad:disabled { cursor: default; }
+
+    .memory-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px;
+      height: 72px;
+      background: #111;
+      border: 4px solid #000;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      cursor: pointer;
+      box-shadow: inset 0 0 0 2px #444;
+    }
+
+    .memory-center span {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 9px;
+      font-weight: bold;
+      color: #fff;
+      text-align: center;
+      line-height: 1.2;
+      letter-spacing: 0.5px;
+    }
+
+    .memory-center:hover { background: #222; }
+
+    .memory-status {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 12px;
+      text-align: center;
+      min-height: 36px;
+      padding: 6px 10px;
+      background: #000;
+      color: #0f0;
+      border: 3px inset #808080;
+      width: min(340px, 92vw);
+      line-height: 1.35;
+    }
+
+    .memory-progress {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .mem-step {
+      width: 22px;
+      height: 22px;
+      border: 2px solid #000;
+      background: #808080;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mem-step.done { background: #0a0; color: #fff; }
+    .mem-step.current { background: #ff0; }
+
+    .memory-box-art {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 10px;
+      color: #404040;
+      text-align: center;
+      border: 2px dashed #808080;
+      padding: 6px;
+      max-width: 340px;
+    }
+
+    /* Level 4 slots */
+    .slot-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slot-cabinet {
+      width: min(480px, 96vw);
+      background: #8b0000;
+      border: 5px solid #000;
+      padding: 14px;
+      box-shadow: inset 0 0 0 4px #500, 5px 5px 0 #000;
+      transform-origin: center center;
+    }
+
+    .slot-cabinet.cabinet-active {
+      box-shadow: inset 0 0 0 4px #500, 5px 5px 0 #000, 0 0 12px #ff0;
+    }
+
+    @keyframes cabinet-shake-mild {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(-2px, 1px); }
+      75% { transform: translate(2px, -1px); }
+    }
+
+    @keyframes cabinet-shake-hard {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-5px, 2px) rotate(-1deg); }
+      40% { transform: translate(5px, -2px) rotate(1deg); }
+      60% { transform: translate(-4px, 3px); }
+      80% { transform: translate(4px, -3px) rotate(-1deg); }
+    }
+
+    @keyframes cabinet-shake-jackpot {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      10% { transform: translate(-8px, 4px) rotate(-2deg) scale(1.02); }
+      30% { transform: translate(8px, -4px) rotate(2deg) scale(1.03); }
+      50% { transform: translate(-6px, 5px) rotate(-1deg); }
+      70% { transform: translate(6px, -5px) rotate(1deg) scale(1.02); }
+      90% { transform: translate(-3px, 2px); }
+    }
+
+    .slot-cabinet.shake-mild {
+      animation: cabinet-shake-mild 0.12s steps(2) 4;
+    }
+
+    .slot-cabinet.shake-hard {
+      animation: cabinet-shake-hard 0.1s steps(3) 8;
+    }
+
+    .slot-cabinet.shake-jackpot {
+      animation: cabinet-shake-jackpot 0.45s steps(6) 1;
+    }
+
+    .slot-reels.shake-reels {
+      animation: cabinet-shake-mild 0.08s steps(2) infinite;
+    }
+
+    .slot-cabinet-inner {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .slot-main { flex: 1; min-width: 0; }
+
+    .slot-odds {
+      display: none;
+    }
+
+    .slot-marquee {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 11px;
+      text-align: center;
+      color: #ff0;
+      background: #000;
+      border: 2px solid #ff0;
+      padding: 4px;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .slot-reels {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      background: #111;
+      border: 4px inset #404040;
+      padding: 10px 8px;
+    }
+
+    .slot-reel {
+      width: 88px;
+      height: 96px;
+      background: #fff;
+      border: 3px solid #000;
+      overflow: hidden;
+      position: relative;
+      image-rendering: pixelated;
+    }
+
+    .slot-reel-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 42px;
+      font-weight: bold;
+      line-height: 96px;
+      height: 96px;
+      width: 100%;
+      will-change: transform;
+    }
+
+    .slot-reel.spinning {
+      background: #ffffcc;
+    }
+
+    .slot-reel.spinning .slot-reel-inner {
+      animation: reel-blur 0.07s steps(2) infinite;
+    }
+
+    @keyframes reel-blur {
+      0% { transform: translateY(0); filter: none; }
+      50% { transform: translateY(-12px); filter: contrast(1.2); }
+      100% { transform: translateY(12px); filter: none; }
+    }
+
+    .slot-reel.reel-land-pop .slot-reel-inner {
+      animation: reel-pop 0.35s steps(4) forwards;
+    }
+
+    @keyframes reel-pop {
+      0% { transform: scale(1.35) translateY(-8px); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    .slot-reel.reel-match-glow {
+      box-shadow: 0 0 14px #ff0, inset 0 0 8px #fffc;
+    }
+
+    .slot-status.jackpot-flash {
+      color: #ff0;
+      animation: status-blink 0.2s steps(2) 8;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    @keyframes status-blink {
+      50% { opacity: 0.4; }
+    }
+
+    .slot-reel.sym-dollar { color: #0a0; }
+    .slot-reel.sym-star { color: #c00; }
+    .slot-reel.sym-amp { color: #404040; }
+    .slot-reel.sym-mix { color: #06c; }
+
+    .slot-lever-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 4px 0;
+    }
+
+    .lever-label {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 9px;
+      font-weight: bold;
+      color: #ff0;
+      letter-spacing: 1px;
+    }
+
+    .lever-track {
+      position: relative;
+      width: 36px;
+      height: 110px;
+      background: #333;
+      border: 3px inset #111;
+      border-radius: 4px;
+    }
+
+    .lever-track::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 8px;
+      bottom: 8px;
+      width: 6px;
+      transform: translateX(-50%);
+      background: repeating-linear-gradient(
+        180deg,
+        #555 0px,
+        #555 6px,
+        #222 6px,
+        #222 12px
+      );
+    }
+
+    .lever-knob {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 44px;
+      height: 28px;
+      margin-left: -22px;
+      background: linear-gradient(180deg, #e8e8e8, #909090);
+      border: 3px solid;
+      border-color: #fff #404040 #404040 #fff;
+      border-radius: 4px;
+      cursor: grab;
+      touch-action: none;
+      z-index: 2;
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    .lever-knob::after {
+      content: "";
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      width: 8px;
+      height: 20px;
+      margin-left: -4px;
+      background: #666;
+      border: 2px solid #000;
+    }
+
+    .lever-knob.dragging { cursor: grabbing; }
+
+    .slot-lever-col.disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .lever-knob.spring {
+      transition: top 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    .slot-status {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 12px;
+      text-align: center;
+      min-height: 40px;
+      padding: 8px 10px;
+      background: #000;
+      color: #0f0;
+      border: 3px inset #808080;
+      width: min(420px, 96vw);
+      line-height: 1.35;
+    }
+
+    .slot-legend {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 10px;
+      color: #404040;
+      text-align: center;
+      line-height: 1.5;
+      max-width: 420px;
+    }
+
+    .slot-legend span { font-weight: bold; }
+
+    /* Level 5 pong */
+    .pong-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pong-scoreboard {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 22px;
+      font-weight: bold;
+      background: #000;
+      color: #0f0;
+      padding: 8px 20px;
+      border: 3px inset #808080;
+      letter-spacing: 4px;
+    }
+
+    .pong-canvas-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    #pong-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 4px solid #000;
+      background: #000;
+      image-rendering: pixelated;
+      cursor: crosshair;
+    }
+
+    #pong-canvas.waiting-start {
+      cursor: pointer;
+    }
+
+    .pong-hint {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 11px;
+      color: #404040;
+      text-align: center;
+    }
+
+    /* Level 2 captcha */
+    .captcha-box {
+      background: #fff;
+      border: 3px solid #808080;
+      padding: 12px;
+      max-width: 340px;
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    .captcha-check-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 14px;
+      padding: 8px;
+      border: 2px inset #c0c0c0;
+      background: #f8f8f8;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .captcha-check-row input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .captcha-challenge {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 2px dashed #808080;
+      display: none;
+    }
+
+    .captcha-challenge.show {
+      display: block;
+    }
+
+    .captcha-loading {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      border: 2px inset #c0c0c0;
+      background: #f0f0f0;
+      text-align: center;
+    }
+
+    .captcha-loading.show {
+      display: block;
+    }
+
+    .captcha-loading p {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .captcha-load-bar {
+      height: 14px;
+      border: 2px solid #000;
+      background: #fff;
+    }
+
+    .captcha-load-fill {
+      height: 100%;
+      width: 0%;
+      background: #0a0;
+      transition: width 0.15s linear;
+    }
+
+    .captcha-challenge p {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .captcha-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .captcha-tile {
+      aspect-ratio: 1;
+      font-size: 26px;
+      line-height: 1.1;
+      background: #e8e8e8;
+      border: 3px solid #808080;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      image-rendering: pixelated;
+    }
+
+    .captcha-tile:hover {
+      background: #fff;
+    }
+
+    .captcha-tile.selected {
+      background: #cce5ff;
+      border-color: #000080;
+      box-shadow: inset 0 0 0 2px #fff;
+    }
+
+    .quiz-wrap {
+      border: 3px solid #000;
+      background: #fff;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .quiz-meta {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 11px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .quiz-question-name {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 11px;
+      color: #000080;
+      font-weight: bold;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .quiz-image-wrap {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .quiz-image-wrap:empty {
+      display: none;
+    }
+
+    .quiz-image-wrap img {
+      max-width: 220px;
+      max-height: 200px;
+      border: 3px solid #000;
+      box-shadow: 3px 3px 0 #808080;
+      image-rendering: auto;
+    }
+
+    .quiz-audio-play {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 8px 14px;
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #fff #808080 #808080 #fff;
+      cursor: pointer;
+    }
+
+    .quiz-audio-play:hover {
+      background: #d4d4d4;
+    }
+
+    .quiz-prompt {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      line-height: 1.35;
+    }
+
+    .quiz-answers {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-answers button {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 13px;
+      text-align: left;
+      padding: 8px 10px;
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #fff #808080 #808080 #fff;
+      cursor: pointer;
+    }
+
+    .quiz-answers button:hover {
+      background: #d4d4d4;
+    }
+
+    .quiz-answers.row-2 {
+      flex-direction: row;
+    }
+
+    .quiz-answers.row-2 button {
+      flex: 1;
+      text-align: center;
+    }
+
+    .quiz-answers.scramble-flee {
+      position: relative;
+      min-height: 320px;
+    }
+
+    .quiz-answers.scramble-flee button {
+      position: relative;
+      transition: transform 0.08s linear;
+      will-change: transform;
+    }
+
+    .quiz-answers.runaway-mode {
+      position: relative;
+      min-height: 120px;
+    }
+
+    .quiz-answers.runaway-mode button.quiz-runaway {
+      position: fixed;
+      z-index: 9000;
+      min-width: 140px;
+    }
+
+    .quiz-text-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .quiz-text-row input {
+      flex: 1;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 13px;
+      padding: 6px 8px;
+      border: 2px inset #808080;
+      background: #fff;
+    }
+
+    .quiz-feedback {
+      min-height: 1.4em;
+      margin-top: 10px;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .quiz-feedback.ok {
+      color: #006600;
+    }
+
+    .quiz-feedback.bad {
+      color: #cc0000;
+    }
+
+    .quiz-strikes {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 2px dashed #808080;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .admin-skip {
+      display: none;
+      margin-top: 10px;
+      font-size: 9px;
+      color: #606060;
+      background: none;
+      border: none;
+      text-decoration: underline;
+      cursor: pointer;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+    }
+
+    .admin-skip.admin-visible {
+      display: block;
+    }
+
+    .win-screen { text-align: center; padding: 24px 8px; }
+
+    .win-screen h2 {
+      font-size: clamp(36px, 10vw, 64px);
+      color: #006400;
+      text-shadow: 3px 3px 0 #000;
+      animation: wiggle 0.4s steps(2) infinite alternate;
+    }
+
+    @keyframes wiggle {
+      from { transform: rotate(-2deg); }
+      to { transform: rotate(2deg); }
+    }
+
+    .win-sub { margin-top: 12px; font-size: 16px; }
+
+    .win-clicker {
+      margin: 24px auto;
+      padding: 20px;
+      max-width: 280px;
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #fff #808080 #808080 #fff;
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    .win-clicker-count {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: #000080;
+    }
+
+    .clicker-big-btn {
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 16px 32px;
+      background: #c0c0c0;
+      border: 4px solid;
+      border-color: #fff #808080 #808080 #fff;
+      cursor: pointer;
+      min-width: 160px;
+    }
+
+    .clicker-big-btn:active {
+      border-color: #808080 #fff #fff #808080;
+    }
+
+    #fail-layer {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.75);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    #fail-layer.show { display: flex; }
+
+    #fail-x-img {
+      width: min(50vmin, 280px);
+      animation: stamp 0.35s steps(4) forwards;
+      transform: scale(0.2);
+      opacity: 0;
+    }
+
+    @keyframes stamp {
+      0% { transform: scale(0.2); opacity: 0; }
+      60% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .failed-popup {
+      width: min(400px, 92vw);
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #fff #808080 #808080 #fff;
+      box-shadow: 6px 6px 0 #000;
+    }
+
+    .failed-popup .title-bar {
+      background: linear-gradient(90deg, #800000, #c00000);
+    }
+
+    .failed-body {
+      padding: 14px;
+      font-family: "Pixel MS", Tahoma, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .failed-body h2 {
+      font-size: 15px;
+      margin-bottom: 10px;
+      color: #800000;
+    }
+
+    #failed-reason {
+      background: #fff;
+      border: 2px inset #808080;
+      padding: 10px;
+      min-height: 48px;
+    }
+
+    .failed-restart-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #404040;
+    }
+
+    .failed-body .btn-row {
+      margin-top: 12px;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+  <div class="desktop">
+    <div class="window">
+      <div class="title-bar">
+        <span id="window-title">job_application.exe</span>
+        <div class="buttons">
+          <span class="title-btn">_</span>
+          <span class="title-btn">□</span>
+          <span class="title-btn">×</span>
+        </div>
+      </div>
+      <div class="window-body">
+        <section id="screen-intro" class="screen active">
+          <div class="intro-art">
+            <div class="intro-banner">
+              <div class="briefcase" aria-hidden="true"></div>
+              <div>
+                <h1>The Job Application</h1>
+                <p class="tagline">
+                  Welcome to onboarding. Complete each ridiculous puzzle to prove you deserve a desk, a badge, and lukewarm break-room coffee.
+                </p>
+                <span class="corp-stamp">HR APPROVED (maybe)</span>
+              </div>
+            </div>
+            <p class="paint-note">* drawn in MS Paint circa 1998 *</p>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="win-btn primary" id="btn-start">START</button>
+          </div>
+        </section>
+
+        <section id="screen-level0" class="screen">
+          <span class="level-tag">LEVEL 0 — APPLICANT FILE</span>
+          <p class="level-desc">Before we waste toner, verify you are a real human employee candidate.</p>
+          <form id="level0-form" class="hr-form" novalidate>
+            <div class="form-row">
+              <label for="input-name">Legal name (as on W-2)</label>
+              <input type="text" id="input-name" autocomplete="name">
+            </div>
+            <div class="form-row">
+              <label for="input-birthday">Date of birth</label>
+              <input type="date" id="input-birthday">
+              <p class="form-hint">Must be 18+ years old and under 100 years old.</p>
+            </div>
+            <div class="form-row">
+              <label for="input-hour">Current hour (0–23)</label>
+              <input type="number" id="input-hour" min="0" max="23">
+              <p class="form-hint">We are watching.</p>
+            </div>
+            <div class="btn-row">
+              <button type="submit" class="win-btn primary">SUBMIT →</button>
+            </div>
+          </form>
+          <button type="button" class="admin-skip" data-skip="level0">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
+        <section id="screen-signage" class="screen">
+          <span class="level-tag">LEVEL 1 — SIGNAGE</span>
+          <p class="level-desc" id="signage-desc">Read the document. Sign in the required ink on the line (you may scribble anywhere on the pad).</p>
+          <div class="document">
+            <div id="word-cloud" class="word-cloud"></div>
+          </div>
+          <div class="sign-zone">
+            <div class="sign-here-row">
+              <span>SIGN HERE</span>
+              <span class="sign-line-mark" aria-hidden="true"></span>
+            </div>
+            <div class="sig-canvas-wrap">
+              <canvas id="signature-canvas" width="640" height="100"></canvas>
+            </div>
+          </div>
+          <div class="sign-controls">
+            <div class="ink-block">
+              <span class="panel-label">Ink:</span>
+              <div class="color-row" id="color-picker">
+                <button type="button" class="color-swatch" data-color="#cc0000" style="background:#cc0000" title="Red" aria-label="Red ink"></button>
+                <button type="button" class="color-swatch" data-color="#0000cc" style="background:#0000cc" title="Blue" aria-label="Blue ink"></button>
+                <button type="button" class="color-swatch selected" data-color="#000000" style="background:#000000" title="Black" aria-label="Black ink"></button>
+                <button type="button" class="color-swatch" data-color="#006600" style="background:#006600" title="Green" aria-label="Green ink"></button>
+              </div>
+            </div>
+            <button type="button" class="win-btn" id="btn-clear-sig">Clear</button>
+            <button type="button" class="win-btn primary" id="btn-next-sign">NEXT →</button>
+          </div>
+          <button type="button" class="admin-skip" data-skip="signage">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
+        <section id="screen-captcha" class="screen">
+          <span class="level-tag">LEVEL 2 — HUMAN VERIFICATION</span>
+          <p class="level-desc">IT requires proof you are not a robot. Check the box, then complete the challenge.</p>
+          <div class="captcha-box">
+            <label class="captcha-check-row" for="captcha-checkbox">
+              <input type="checkbox" id="captcha-checkbox">
+              <span>I am not a robot</span>
+            </label>
+            <div class="captcha-loading" id="captcha-loading">
+              <p id="captcha-load-text">Verifying you are not a robot...</p>
+              <div class="captcha-load-bar"><div class="captcha-load-fill" id="captcha-load-fill"></div></div>
+            </div>
+            <div class="captcha-challenge" id="captcha-challenge">
+              <p>Select all squares with <strong>PARROTS</strong>:</p>
+              <div class="captcha-grid" id="captcha-grid"></div>
+              <button type="button" class="win-btn primary" id="btn-captcha-verify">VERIFY</button>
+            </div>
+          </div>
+          <button type="button" class="admin-skip" data-skip="captcha">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
+        <section id="screen-essay" class="screen">
+          <span class="level-tag">LEVEL 3 — COVER LETTER</span>
+          <p class="level-desc">Explain why you would be a good fit for this company.</p>
+          <p class="essay-requirement">* You need at least 600 words.</p>
+          <p class="essay-prompt">Prompt: Why would you be a good fit for this job?</p>
+          <textarea id="essay-input" placeholder="Start typing your essay here..."></textarea>
+          <p class="essay-word-footer"><span class="count-num" id="essay-word-count">0</span> words</p>
+          <div class="btn-row">
+            <button type="button" class="win-btn primary" id="btn-next-essay">SUBMIT ESSAY →</button>
+          </div>
+          <button type="button" class="admin-skip" data-skip="essay">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
+        <section id="screen-memory" class="screen">
+          <span class="level-tag">LEVEL 4 — MEMORY SCREENING</span>
+          <p class="level-desc">
+            We need to know your memory to make sure you are fit for the job. Watch the lights, hear the tones, repeat the pattern. Pass all 7 rounds.
+          </p>
+          <div class="memory-wrap">
+            <div class="memory-progress" id="memory-progress" aria-label="Memory rounds"></div>
+            <div class="memory-device">
+              <div class="memory-brand">TINGBOWIE — CORPORATE EDITION</div>
+              <div class="memory-grid">
+                <button type="button" class="mem-pad red" data-pad="0" aria-label="Red pad"></button>
+                <button type="button" class="mem-pad green" data-pad="1" aria-label="Green pad"></button>
+                <button type="button" class="mem-pad blue" data-pad="2" aria-label="Blue pad"></button>
+                <button type="button" class="mem-pad yellow" data-pad="3" aria-label="Yellow pad"></button>
+                <button type="button" class="memory-center" id="btn-memory-start" aria-label="Start memory test">
+                  <span>MEM<br>ORY</span>
+                </button>
+              </div>
+            </div>
+            <div class="memory-status" id="memory-status">Press MEMORY to begin Round 1</div>
+            <div class="memory-box-art">LIGHTS &amp; SOUNDS! — pixel HR assessment unit</div>
+          </div>
+          <button type="button" class="admin-skip" data-skip="memory">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
+        <section id="screen-slots" class="screen">
+          <span class="level-tag">LEVEL 5 — LUCK AUDIT</span>
+          <p class="level-desc">
+            HR must verify you are <em>lucky</em> enough for this company. Slide the trigger down on each spin. Land <strong>$$$</strong> to continue.
+          </p>
+          <div class="slot-wrap">
+            <div class="slot-cabinet" id="slot-cabinet">
+              <div class="slot-marquee">★ CORPORATE SLOTS ★</div>
+              <div class="slot-cabinet-inner">
+                <div class="slot-main">
+                  <div class="slot-reels" id="slot-reels-row">
+                    <div class="slot-reel sym-mix" id="slot-reel-0" aria-label="Reel 1"><span class="slot-reel-inner">?</span></div>
+                    <div class="slot-reel sym-mix" id="slot-reel-1" aria-label="Reel 2"><span class="slot-reel-inner">?</span></div>
+                    <div class="slot-reel sym-mix" id="slot-reel-2" aria-label="Reel 3"><span class="slot-reel-inner">?</span></div>
+                  </div>
+                  <p class="slot-odds" id="slot-odds"></p>
+                </div>
+                <div class="slot-lever-col" id="slot-lever-col">
+                  <span class="lever-label">TRIGGER</span>
+                  <div class="lever-track" id="lever-track">
+                    <div class="lever-knob spring" id="slot-lever-knob" role="slider" aria-label="Slot trigger"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="slot-status" id="slot-status">Slide the trigger down, then let go.</div>
+            <p class="slot-legend">
+              <span>$$$</span> = advance &nbsp;|&nbsp;
+              <span>***</span> = start over &nbsp;|&nbsp;
+              <span>&amp;&amp;&amp;</span> = nothing &nbsp;|&nbsp;
+              mixes = spin again
+            </p>
+          </div>
+          <button type="button" class="admin-skip" data-skip="slots">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
+        <section id="screen-pong" class="screen">
+          <span class="level-tag">LEVEL 6 — REFLEX INTERVIEW</span>
+          <p class="level-desc">Beat the HR training bot in pong. First to <strong>5 points</strong> wins — but don’t let the bot reach 5.</p>
+          <div class="pong-wrap">
+            <div class="pong-scoreboard" id="pong-score">0 — 0</div>
+            <div class="pong-canvas-wrap">
+              <canvas id="pong-canvas" width="560" height="320"></canvas>
+            </div>
+            <p class="pong-hint" id="pong-hint">Click the court to start. Mouse or W / S — reach 5 points before the bot does.</p>
+          </div>
+          <button type="button" class="admin-skip" data-skip="pong">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
+        <section id="screen-quiz" class="screen">
+          <span class="level-tag">LEVEL 7 — THE QUIZ</span>
+          <p class="level-desc">Answer all <strong>7 questions</strong>. <strong>3 strikes</strong> and you instantly fail.</p>
+          <div class="quiz-wrap">
+            <div class="quiz-meta">
+              <span id="quiz-progress">Question 1 of 7</span>
+            </div>
+            <p class="quiz-question-name" id="quiz-question-name"></p>
+            <div class="quiz-image-wrap" id="quiz-image-wrap"></div>
+            <p class="quiz-prompt" id="quiz-prompt"></p>
+            <div class="quiz-answers" id="quiz-answers"></div>
+            <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
+            <p class="quiz-strikes" id="quiz-strikes">Strikes: 0 / 3</p>
+          </div>
+          <button type="button" class="admin-skip" data-skip="quiz">SKIP (ADMIN USE ONLY)</button>
+        </section>
+
+        <section id="screen-win" class="screen win-screen">
+          <h2>YOU WIN</h2>
+          <p class="win-sub" id="win-message">You are provisionally employable.</p>
+          <div class="win-clicker">
+            <p class="win-clicker-count" id="clicker-count">0</p>
+            <button type="button" class="clicker-big-btn" id="clicker-btn">CLICK</button>
+          </div>
+          <div class="btn-row" style="justify-content:center;margin-top:16px;">
+            <button type="button" class="win-btn" id="btn-replay">PLAY AGAIN</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="fail-layer" role="presentation" aria-hidden="true">
+    <img id="fail-x-img" src="assets/fail-x.png" alt="">
+    <div class="failed-popup" role="alertdialog" aria-modal="true" aria-labelledby="failed-heading">
+      <div class="title-bar">
+        <span id="failed-heading">FAILED</span>
+      </div>
+      <div class="failed-body">
+        <p id="failed-reason"></p>
+        <p class="failed-restart-note">You must start over from the beginning.</p>
+        <div class="btn-row">
+          <button type="button" class="win-btn primary" id="btn-failed-close">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const RED_INK = "#cc0000";
+    const BLACK_INK = "#000000";
+    const MEMORY_ROUNDS = 7;
+    const ESSAY_WORD_TARGET = 600;
+
+    const fillerWords = [
+      "WHEREAS", "HEREBY", "FURTHERMORE", "NOTWITHSTANDING", "PURSUANT", "INDEMNIFY",
+      "CONFIDENTIAL", "SYNERGY", "STAKEHOLDER", "DELIVERABLE", "ONBOARDING", "KPI",
+      "COMPLIANCE", "ARBITRATION", "WAIVER", "TERMINATION", "BENEFITS", "PAYROLL",
+      "DRESS", "CODE", "MANDATORY", "FUN", "RETREAT", "PIP", "PERFORMANCE", "REVIEW",
+      "DESK", "CHAIR", "BADGE", "PARKING", "LOT", "SECTION", "712", "PARAGRAPH",
+      "INITIAL", "HERE", "SIGN", "BELOW", "EMPLOYEE", "ACKNOWLEDGES", "READ", "UNDERSTOOD",
+      "AGREES", "BINDING", "EFFECT", "JURISDICTION", "DELAWARE", "CORPORATION", "LLC",
+      "ATTORNEY", "FEES", "SEVERABILITY", "ENTIRE", "AGREEMENT", "AMENDMENT", "WRITING",
+      "COUNTERPARTS", "ELECTRONIC", "SIGNATURE", "VOID", "WHERE", "PROHIBITED", "LUNCH",
+      "BREAK", "15", "MINUTES", "MAX", "NO", "REFUNDS", "SOUL", "OPTIONAL", "CLAUSE"
+    ];
+    const SIGN_INK_OPTIONS = [
+      { name: "Red", hex: "#cc0000" },
+      { name: "Blue", hex: "#0000cc" },
+      { name: "Black", hex: "#000000" },
+      { name: "Green", hex: "#006600" }
+    ];
+    const ADMIN_SKIP_PASSWORD = "marloww";
+
+    const PAD_FREQ = [329.63, 261.63, 220, 164.81];
+    const PAD_NAMES = ["RED", "GREEN", "BLUE", "YELLOW"];
+
+    let playerName = "";
+    let requiredSignColor = SIGN_INK_OPTIONS[0].hex;
+    let currentColor = BLACK_INK;
+    let hasSignature = false;
+    let adminModeActive = false;
+    let adminPasswordOk = false;
+    let isDrawing = false;
+
+    let memoryRound = 0;
+    let memorySequence = [];
+    let playerStep = 0;
+    let memoryPlaying = false;
+    let memoryInputEnabled = false;
+    let slotSpinning = false;
+    let audioCtx = null;
+
+    const SLOT_WIN = "$";
+    const SLOT_LOSE = "*";
+    const SLOT_NOTHING = "&";
+    const SLOT_SPIN_SYMBOLS = ["$", "*", "&", "#", "%", "?"];
+    const SLOT_FINAL_POOL = ["$", "*", "&", "#", "%", "?"];
+    const SLOT_RIGGED_WIN_CHANCE = 0.08;
+    const SLOT_RIGGED_LOSE_CHANCE = 0.04;
+
+    const CAPTCHA_TARGET = "🦜";
+    const CAPTCHA_DISTRACTORS = ["🧁", "🍩", "🌈", "🧁", "🍩", "🌈", "🧁", "🍩", "🌈"];
+    const CAPTCHA_LOAD_STALL_PCT = 90;
+    const CAPTCHA_LOAD_FAST_MS = 2200;
+    const CAPTCHA_LOAD_SLOW_MS = 30000;
+
+    const QUIZ_MAX_STRIKES = 3;
+    const QUIZ_SHOWN_TOTAL = 7;
+    const QUIZ_QUESTIONS = [
+      { name: "Water Wet", type: "tf", prompt: "Is water wet?", answer: false },
+      {
+        name: "Biggest Thing",
+        type: "choice",
+        prompt: "Pick the biggest thing.",
+        options: ["Infinity", "Elephant", "Biggest thing", "Aura master"],
+        answer: 2
+      },
+      { name: "Your Name", type: "text", prompt: "Type in your name:", match: "applicantName" },
+      {
+        name: "Stage Four",
+        type: "choice",
+        prompt: "What was stage 4?",
+        options: ["Memory Screening", "reCAPTCHA", "Essay", "Luck Audit"],
+        answer: 0
+      },
+      {
+        name: "Crime Disclosure",
+        type: "choice",
+        prompt: "Did you tell us you committed a crime?",
+        options: ["No", "Yes", "I didn't commit a crime", "I did commit a crime"],
+        answer: 2
+      },
+      {
+        name: "FinleyChang Title",
+        type: "choice",
+        prompt: "What is finleychang.com's title right now?",
+        options: ["Finverse", "Finhub", "Github", "FinleyChang.com"],
+        answer: 0
+      },
+      {
+        name: "Recall Question Five",
+        type: "choice",
+        prompt: "What was question 5?",
+        options: ["Crimes", "FinleyChang.com names", "Water", "Trees hate you"],
+        answer: 0
+      },
+      {
+        name: "Jolly Guy",
+        type: "choice",
+        behavior: "speedTriple",
+        image: "assets/quiz-speed.png",
+        progress: { n: 8, of: 7 },
+        prompt: "Who is this jolly guy?",
+        options: ["Yooo Ronaldo", "Speed", "Ishowtreat", "Ronaldo Suyyee"],
+        answer: 1
+      },
+      {
+        name: "Mystery Console",
+        type: "choice",
+        behavior: "hoverSwap",
+        image: "assets/quiz-xbox.png",
+        progress: { n: 9, of: 7 },
+        prompt: "What is this?",
+        options: ["Play station", "Play station", "Play station", "Xbox"],
+        answer: 3
+      },
+      {
+        name: "Trick Question",
+        type: "choice",
+        behavior: "runaway",
+        image: "assets/quiz-triple-t.png",
+        progress: { n: 10, of: 7 },
+        prompt: "Who is this happy egg roll playing drums?",
+        options: ["Quad T", "Tripple T", "Duo T", "Mango emoji"],
+        answer: 1
+      },
+      {
+        name: "Last Question",
+        type: "choice",
+        behavior: "scrambleFlee",
+        image: "assets/quiz-just-a-guy.png",
+        progress: { n: 11, of: 7 },
+        prompt: "Who is pointing at this guy?",
+        options: [
+          "No one is pointing at him",
+          "67 kid",
+          "Meme",
+          "tall man",
+          "shrek",
+          "Fortnight",
+          "Xbox",
+          "Gambling",
+          "tripple T",
+          "mr egg roll",
+          "phonk aura"
+        ],
+        answer: 0
+      },
+      {
+        name: "JK Audio",
+        type: "text",
+        audio: "assets/mango-phonk-kid-voice.mp3",
+        progress: { n: 12, of: 7 },
+        prompt: "What is the kid saying?",
+        answer: "Mango"
+      }
+    ];
+
+    const screens = {
+      intro: document.getElementById("screen-intro"),
+      level0: document.getElementById("screen-level0"),
+      signage: document.getElementById("screen-signage"),
+      captcha: document.getElementById("screen-captcha"),
+      essay: document.getElementById("screen-essay"),
+      memory: document.getElementById("screen-memory"),
+      slots: document.getElementById("screen-slots"),
+      pong: document.getElementById("screen-pong"),
+      quiz: document.getElementById("screen-quiz"),
+      win: document.getElementById("screen-win")
+    };
+
+    const windowTitle = document.getElementById("window-title");
+    const wordCloudEl = document.getElementById("word-cloud");
+    const canvas = document.getElementById("signature-canvas");
+    const ctx = canvas.getContext("2d");
+    const failLayer = document.getElementById("fail-layer");
+    const failedReasonEl = document.getElementById("failed-reason");
+    const memoryStatus = document.getElementById("memory-status");
+    const memoryProgress = document.getElementById("memory-progress");
+    const memPads = [...document.querySelectorAll(".mem-pad")];
+    const btnMemoryStart = document.getElementById("btn-memory-start");
+    const essayInput = document.getElementById("essay-input");
+    const essayWordCountEl = document.getElementById("essay-word-count");
+    const slotReels = [
+      document.getElementById("slot-reel-0"),
+      document.getElementById("slot-reel-1"),
+      document.getElementById("slot-reel-2")
+    ];
+    const slotStatus = document.getElementById("slot-status");
+    const slotOddsEl = document.getElementById("slot-odds");
+    const slotLeverKnob = document.getElementById("slot-lever-knob");
+    const slotLeverCol = document.getElementById("slot-lever-col");
+    const leverTrack = document.getElementById("lever-track");
+    const slotCabinet = document.getElementById("slot-cabinet");
+    const slotReelsRow = document.getElementById("slot-reels-row");
+    const pongCanvas = document.getElementById("pong-canvas");
+    const pongCtx = pongCanvas.getContext("2d");
+    const pongScoreEl = document.getElementById("pong-score");
+
+    const titles = {
+      intro: "job_application.exe",
+      level0: "applicant_file_0.txt",
+      signage: "signage_level_1.doc",
+      captcha: "human_check_v2.exe",
+      essay: "cover_letter_lvl3.doc",
+      memory: "memory_screening_lvl4.exe",
+      slots: "luck_audit_slots_lvl5.exe",
+      pong: "reflex_interview_lvl6.exe",
+      quiz: "the_quiz_lvl7.exe",
+      win: "YOU_WIN.bmp"
+    };
+
+    let captchaParrotIndices = [];
+    let captchaSelected = new Set();
+    let captchaLoadTimer = null;
+    let captchaLoadRaf = null;
+    const captchaCheckbox = document.getElementById("captcha-checkbox");
+    const captchaChallenge = document.getElementById("captcha-challenge");
+    const captchaLoading = document.getElementById("captcha-loading");
+    const captchaLoadFill = document.getElementById("captcha-load-fill");
+    const captchaLoadText = document.getElementById("captcha-load-text");
+    const captchaGrid = document.getElementById("captcha-grid");
+
+    let quizIndex = 0;
+    let quizWrong = 0;
+    const quizProgressEl = document.getElementById("quiz-progress");
+    const quizStrikesEl = document.getElementById("quiz-strikes");
+    const quizFeedbackEl = document.getElementById("quiz-feedback");
+    const quizQuestionNameEl = document.getElementById("quiz-question-name");
+    const quizImageWrapEl = document.getElementById("quiz-image-wrap");
+    const quizPromptEl = document.getElementById("quiz-prompt");
+    const quizAnswersEl = document.getElementById("quiz-answers");
+    let quizAdvancing = false;
+    let quizAudioEl = null;
+    let quizChoiceCleanup = null;
+    let quizSpeedClickCount = 0;
+    let quizRunawayClickCount = 0;
+
+    const QUIZ_SPEED_WARNINGS = [
+      "⚠ Not so fast — are you sure?",
+      "⚠ HR flagged that click. Still Speed?",
+      "⚠ Last warning. One more Speed click..."
+    ];
+
+    let slotSpeedMult = 1;
+
+    let leverDragging = false;
+    let leverPull = 0;
+    const LEVER_TRAVEL = 82;
+    const LEVER_FIRE_THRESHOLD = 0.72;
+
+    let pongRunning = false;
+    let pongWaitingStart = true;
+    let pongAnimId = null;
+    const PONG_TARGET = 5;
+    const pongHintEl = document.getElementById("pong-hint");
+    const pongState = {
+      w: 560,
+      h: 320,
+      paddleH: 70,
+      paddleW: 12,
+      playerY: 125,
+      botY: 125,
+      ballX: 280,
+      ballY: 160,
+      ballVX: 2,
+      ballVY: 1.4,
+      botDir: 1,
+      scoreP: 0,
+      scoreB: 0,
+      keys: { up: false, down: false }
+    };
+
+    function showScreen(name) {
+      if (name !== "pong") stopPong();
+      Object.values(screens).forEach((el) => el.classList.remove("active"));
+      screens[name].classList.add("active");
+      windowTitle.textContent = titles[name] || titles.intro;
+      if (name === "pong") preparePongScreen();
+    }
+
+    function getAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+
+    function playTone(freq, duration = 0.22) {
+      const ac = getAudio();
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = "square";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.15, ac.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start();
+      osc.stop(ac.currentTime + duration);
+    }
+
+    function restartFromBeginning() {
+      playerName = "";
+      adminModeActive = false;
+      adminPasswordOk = false;
+      resetClicker();
+      updateAdminSkipUI();
+      resetLevel0();
+      resetSignageLevel();
+      resetCaptchaLevel();
+      resetEssayLevel();
+      resetMemoryLevel();
+      resetSlotsLevel();
+      stopPong();
+      resetPongLevel();
+      resetQuizLevel();
+      showScreen("intro");
+    }
+
+    function closeFailedPopup() {
+      failLayer.classList.remove("show");
+      failLayer.setAttribute("aria-hidden", "true");
+      restartFromBeginning();
+    }
+
+    function showFail(reason) {
+      memoryInputEnabled = false;
+      memoryPlaying = false;
+      slotSpinning = false;
+      setPadsEnabled(false);
+      setSlotLeverEnabled(true);
+      failedReasonEl.textContent = reason;
+      failLayer.classList.add("show");
+      failLayer.setAttribute("aria-hidden", "false");
+      document.getElementById("btn-failed-close").focus();
+    }
+
+    document.getElementById("btn-failed-close").addEventListener("click", closeFailedPopup);
+
+    /* ——— Level 0 ——— */
+    function getAgeFromBirthday(birthdayStr) {
+      const birth = new Date(birthdayStr + "T12:00:00");
+      const today = new Date();
+      let age = today.getFullYear() - birth.getFullYear();
+      const monthDiff = today.getMonth() - birth.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+        age -= 1;
+      }
+      return age;
+    }
+
+    function validateLevel0() {
+      const name = document.getElementById("input-name").value.trim();
+      const birthday = document.getElementById("input-birthday").value;
+      const hourVal = document.getElementById("input-hour").value;
+
+      if (!name) {
+        showFail("You did not enter your name.");
+        return false;
+      }
+      if (!birthday) {
+        showFail("You did not enter your date of birth.");
+        return false;
+      }
+      if (hourVal === "" || Number.isNaN(parseInt(hourVal, 10))) {
+        showFail("You did not enter the current hour.");
+        return false;
+      }
+
+      const age = getAgeFromBirthday(birthday);
+      if (age < 18) {
+        showFail("You must be at least 18 years old to apply.");
+        return false;
+      }
+      if (age >= 100) {
+        showFail("You must be under 100 years old to apply.");
+        return false;
+      }
+
+      const hour = parseInt(hourVal, 10);
+      if (hour !== new Date().getHours()) {
+        showFail("That is not the current hour.");
+        return false;
+      }
+
+      playerName = name;
+      return true;
+    }
+
+    function resetLevel0() {
+      document.getElementById("level0-form").reset();
+    }
+
+    document.getElementById("level0-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (validateLevel0()) {
+        resetSignageLevel();
+        showScreen("signage");
+      }
+    });
+
+    /* ——— Level 1 signage ——— */
+    function getInkOption(hex) {
+      return SIGN_INK_OPTIONS.find((o) => o.hex.toLowerCase() === hex.toLowerCase()) || SIGN_INK_OPTIONS[0];
+    }
+
+    function pickRequiredSignColor() {
+      const opt = SIGN_INK_OPTIONS[Math.floor(Math.random() * SIGN_INK_OPTIONS.length)];
+      requiredSignColor = opt.hex;
+      return opt;
+    }
+
+    function colorsMatch(a, b) {
+      return String(a).toLowerCase() === String(b).toLowerCase();
+    }
+
+    function buildWordCloud() {
+      const inkName = getInkOption(requiredSignColor).name.toLowerCase();
+      const secretPhrase = ["you", "must", "sign", "in", inkName, "ink"];
+      const fillers = [];
+      for (let i = 0; i < 88; i++) {
+        fillers.push(fillerWords[Math.floor(Math.random() * fillerWords.length)]);
+      }
+      const insertAt = 14 + Math.floor(Math.random() * (fillers.length - 28));
+      const parts = fillers.map((t) => `<span>${t}</span>`);
+      const secretHtml = secretPhrase.map((t) => `<span>${t}</span>`).join(" ");
+      parts.splice(insertAt, 0, secretHtml);
+      wordCloudEl.innerHTML = parts.join(" ");
+    }
+
+    function selectBlackInk() {
+      currentColor = BLACK_INK;
+      document.querySelectorAll(".color-swatch").forEach((sw) => {
+        sw.classList.toggle("selected", sw.dataset.color === BLACK_INK);
+      });
+    }
+
+    function updateSignageDesc() {
+      const ink = getInkOption(requiredSignColor);
+      const desc = document.getElementById("signage-desc");
+      if (desc) {
+        desc.textContent =
+          `Read the document. Sign in ${ink.name} ink on the line (you may scribble anywhere on the pad).`;
+      }
+    }
+
+    function resetSignatureCanvas() {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "#cccccc";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(8, canvas.height - 28);
+      ctx.lineTo(canvas.width - 8, canvas.height - 28);
+      ctx.stroke();
+      hasSignature = false;
+    }
+
+    function resetSignageLevel() {
+      pickRequiredSignColor();
+      updateSignageDesc();
+      buildWordCloud();
+      resetSignatureCanvas();
+      selectBlackInk();
+    }
+
+    function countWords(text) {
+      const trimmed = text.trim();
+      if (!trimmed) return 0;
+      return trimmed.split(/\s+/).filter(Boolean).length;
+    }
+
+    function updateEssayWordCount() {
+      essayWordCountEl.textContent = countWords(essayInput.value);
+    }
+
+    function resetEssayLevel() {
+      essayInput.value = "";
+      updateEssayWordCount();
+    }
+
+    function getEssayFailReason() {
+      const n = countWords(essayInput.value);
+      if (n === 0) {
+        return "You did not write your essay.";
+      }
+      if (n < ESSAY_WORD_TARGET) {
+        return `Your essay must be at least ${ESSAY_WORD_TARGET} words. You only wrote ${n} words.`;
+      }
+      return null;
+    }
+
+    function getSignageFailReason() {
+      const inkName = getInkOption(requiredSignColor).name;
+      if (!hasSignature && !colorsMatch(currentColor, requiredSignColor)) {
+        return `You did not sign, and you did not use ${inkName} ink.`;
+      }
+      if (!hasSignature) {
+        return "You did not sign the document.";
+      }
+      if (!colorsMatch(currentColor, requiredSignColor)) {
+        return `You must sign in ${inkName} ink.`;
+      }
+      return null;
+    }
+
+    function checkSignageSuccess() {
+      return getSignageFailReason() === null;
+    }
+
+    function drawLine(x0, y0, x1, y1) {
+      ctx.strokeStyle = currentColor;
+      ctx.lineWidth = 5;
+      ctx.lineCap = "square";
+      ctx.beginPath();
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(x1, y1);
+      ctx.stroke();
+      hasSignature = true;
+    }
+
+    function canvasPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    let last = null;
+
+    function startDraw(e) {
+      e.preventDefault();
+      isDrawing = true;
+      last = canvasPos(e);
+    }
+
+    function moveDraw(e) {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const pos = canvasPos(e);
+      drawLine(last.x, last.y, pos.x, pos.y);
+      last = pos;
+    }
+
+    function endDraw() {
+      isDrawing = false;
+      last = null;
+    }
+
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mousemove", moveDraw);
+    canvas.addEventListener("mouseup", endDraw);
+    canvas.addEventListener("mouseleave", endDraw);
+    canvas.addEventListener("touchstart", startDraw, { passive: false });
+    canvas.addEventListener("touchmove", moveDraw, { passive: false });
+    canvas.addEventListener("touchend", endDraw);
+
+    document.getElementById("color-picker").addEventListener("click", (e) => {
+      const sw = e.target.closest(".color-swatch");
+      if (!sw) return;
+      currentColor = sw.dataset.color;
+      document.querySelectorAll(".color-swatch").forEach((s) => s.classList.remove("selected"));
+      sw.classList.add("selected");
+    });
+
+    document.getElementById("btn-clear-sig").addEventListener("click", resetSignatureCanvas);
+
+    document.getElementById("btn-next-sign").addEventListener("click", () => {
+      if (checkSignageSuccess()) {
+        resetCaptchaLevel();
+        showScreen("captcha");
+      } else {
+        showFail(getSignageFailReason());
+      }
+    });
+
+    /* ——— Level 2 captcha ——— */
+    function buildCaptchaGrid() {
+      captchaParrotIndices = [];
+      captchaSelected.clear();
+      const parrotCount = 4;
+      while (captchaParrotIndices.length < parrotCount) {
+        const idx = Math.floor(Math.random() * 9);
+        if (!captchaParrotIndices.includes(idx)) captchaParrotIndices.push(idx);
+      }
+
+      const symbols = CAPTCHA_DISTRACTORS.map((sym, i) =>
+        captchaParrotIndices.includes(i) ? CAPTCHA_TARGET : sym
+      );
+
+      captchaGrid.innerHTML = "";
+      symbols.forEach((sym, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "captcha-tile";
+        btn.textContent = sym;
+        btn.dataset.index = String(i);
+        btn.addEventListener("click", () => {
+          if (captchaSelected.has(i)) {
+            captchaSelected.delete(i);
+            btn.classList.remove("selected");
+          } else {
+            captchaSelected.add(i);
+            btn.classList.add("selected");
+          }
+        });
+        captchaGrid.appendChild(btn);
+      });
+    }
+
+    function clearCaptchaLoadTimer() {
+      if (captchaLoadTimer) {
+        clearTimeout(captchaLoadTimer);
+        captchaLoadTimer = null;
+      }
+      if (captchaLoadRaf) {
+        cancelAnimationFrame(captchaLoadRaf);
+        captchaLoadRaf = null;
+      }
+    }
+
+    function startCaptchaLoadSequence() {
+      clearCaptchaLoadTimer();
+      captchaChallenge.classList.remove("show");
+      captchaLoading.classList.add("show");
+      captchaLoadFill.style.transition = "none";
+      captchaLoadFill.style.width = "0%";
+      const loadStart = performance.now();
+      const totalMs = CAPTCHA_LOAD_FAST_MS + CAPTCHA_LOAD_SLOW_MS;
+
+      const tick = (now) => {
+        const elapsed = now - loadStart;
+        let pct;
+        if (elapsed < CAPTCHA_LOAD_FAST_MS) {
+          pct = (elapsed / CAPTCHA_LOAD_FAST_MS) * CAPTCHA_LOAD_STALL_PCT;
+        } else if (elapsed < totalMs) {
+          const slowT = Math.min(1, (elapsed - CAPTCHA_LOAD_FAST_MS) / CAPTCHA_LOAD_SLOW_MS);
+          const eased = 1 - Math.pow(1 - slowT, 7);
+          pct = CAPTCHA_LOAD_STALL_PCT + eased * (100 - CAPTCHA_LOAD_STALL_PCT);
+        } else {
+          captchaLoadFill.style.width = "100%";
+          captchaLoadText.textContent = "Verifying you are not a robot... done!";
+          captchaLoading.classList.remove("show");
+          captchaChallenge.classList.add("show");
+          buildCaptchaGrid();
+          captchaLoadRaf = null;
+          return;
+        }
+        captchaLoadFill.style.width = `${pct}%`;
+        captchaLoadText.textContent = `Verifying you are not a robot... ${Math.floor(pct)}%`;
+        captchaLoadRaf = requestAnimationFrame(tick);
+      };
+      captchaLoadRaf = requestAnimationFrame(tick);
+    }
+
+    function resetCaptchaLevel() {
+      clearCaptchaLoadTimer();
+      captchaCheckbox.checked = false;
+      captchaChallenge.classList.remove("show");
+      captchaLoading.classList.remove("show");
+      captchaLoadFill.style.width = "0%";
+      captchaSelected.clear();
+    }
+
+    captchaCheckbox.addEventListener("change", () => {
+      if (captchaCheckbox.checked) {
+        startCaptchaLoadSequence();
+      } else {
+        clearCaptchaLoadTimer();
+        captchaChallenge.classList.remove("show");
+        captchaLoading.classList.remove("show");
+        captchaLoadFill.style.width = "0%";
+        captchaSelected.clear();
+        captchaGrid.querySelectorAll(".captcha-tile").forEach((t) => {
+          t.classList.remove("selected");
+        });
+      }
+    });
+
+    document.getElementById("btn-captcha-verify").addEventListener("click", () => {
+      if (!captchaCheckbox.checked) {
+        showFail("You must check the box to prove you are not a robot.");
+        return;
+      }
+      const correct = new Set(captchaParrotIndices);
+      if (captchaSelected.size !== correct.size) {
+        showFail("Wrong squares selected. Select every square with a parrot.");
+        return;
+      }
+      for (const idx of captchaSelected) {
+        if (!correct.has(idx)) {
+          showFail("Wrong squares selected. Select ONLY squares with parrots.");
+          return;
+        }
+      }
+      resetEssayLevel();
+      showScreen("essay");
+    });
+
+    essayInput.addEventListener("input", updateEssayWordCount);
+
+    document.getElementById("btn-next-essay").addEventListener("click", () => {
+      const failReason = getEssayFailReason();
+      if (failReason) {
+        showFail(failReason);
+      } else {
+        resetMemoryLevel();
+        showScreen("memory");
+      }
+    });
+
+    /* ——— Level 3 memory ——— */
+    function buildMemoryProgress() {
+      memoryProgress.innerHTML = "";
+      for (let i = 1; i <= MEMORY_ROUNDS; i++) {
+        const el = document.createElement("div");
+        el.className = "mem-step";
+        el.textContent = i;
+        el.dataset.round = i;
+        memoryProgress.appendChild(el);
+      }
+      updateMemoryProgressUI();
+    }
+
+    function updateMemoryProgressUI() {
+      memoryProgress.querySelectorAll(".mem-step").forEach((el, idx) => {
+        const n = idx + 1;
+        el.classList.remove("done", "current");
+        if (n < memoryRound) el.classList.add("done");
+        else if (n === memoryRound && memoryRound > 0) el.classList.add("current");
+      });
+    }
+
+    function setPadsEnabled(on) {
+      memPads.forEach((p) => { p.disabled = !on; });
+    }
+
+    function flashPad(index, litMs = 450) {
+      return new Promise((resolve) => {
+        const pad = memPads[index];
+        pad.classList.add("lit");
+        playTone(PAD_FREQ[index], litMs / 1000 * 0.9);
+        setTimeout(() => {
+          pad.classList.remove("lit");
+          setTimeout(resolve, 120);
+        }, litMs);
+      });
+    }
+
+    async function playSequence() {
+      memoryPlaying = true;
+      memoryInputEnabled = false;
+      setPadsEnabled(false);
+      memoryStatus.textContent = "WATCH THE PATTERN...";
+      for (let i = 0; i < memorySequence.length; i++) {
+        await flashPad(memorySequence[i]);
+      }
+      memoryPlaying = false;
+      memoryInputEnabled = true;
+      setPadsEnabled(true);
+      playerStep = 0;
+      memoryStatus.textContent = `YOUR TURN — repeat ${memorySequence.length} step(s)`;
+    }
+
+    function goToSlots() {
+      resetSlotsLevel();
+      showScreen("slots");
+    }
+
+    function startMemoryRound() {
+      if (memoryPlaying) return;
+      memoryRound += 1;
+      if (memoryRound > MEMORY_ROUNDS) {
+        goToSlots();
+        return;
+      }
+      memorySequence.push(Math.floor(Math.random() * 4));
+      updateMemoryProgressUI();
+      memoryStatus.textContent = `Round ${memoryRound} of ${MEMORY_ROUNDS} — loading...`;
+      btnMemoryStart.disabled = true;
+      setTimeout(() => playSequence().then(() => {
+        btnMemoryStart.disabled = false;
+      }), 400);
+    }
+
+    function resetMemoryLevel() {
+      memoryRound = 0;
+      memorySequence = [];
+      playerStep = 0;
+      memoryPlaying = false;
+      memoryInputEnabled = false;
+      memPads.forEach((p) => p.classList.remove("lit"));
+      setPadsEnabled(false);
+      buildMemoryProgress();
+      memoryStatus.textContent = "Press MEMORY to begin Round 1";
+      btnMemoryStart.disabled = false;
+    }
+
+    function failMemory() {
+      showFail("Wrong button. You failed the memory screening.");
+    }
+
+    function onPadPress(index) {
+      if (!memoryInputEnabled || memoryPlaying) return;
+      getAudio();
+      flashPad(index, 280);
+      if (memorySequence[playerStep] !== index) {
+        failMemory();
+        return;
+      }
+      playerStep += 1;
+      if (playerStep >= memorySequence.length) {
+        memoryInputEnabled = false;
+        setPadsEnabled(false);
+        if (memoryRound >= MEMORY_ROUNDS) {
+          memoryStatus.textContent = "MEMORY APPROVED!";
+          setTimeout(goToSlots, 600);
+        } else {
+          memoryStatus.textContent = `Round ${memoryRound} passed! Press MEMORY for next.`;
+          btnMemoryStart.disabled = false;
+        }
+      }
+    }
+
+    btnMemoryStart.addEventListener("click", () => {
+      if (memoryRound >= MEMORY_ROUNDS && playerStep >= memorySequence.length) return;
+      if (memoryInputEnabled) return;
+      if (memoryRound === 0 || (playerStep >= memorySequence.length && memoryRound < MEMORY_ROUNDS)) {
+        startMemoryRound();
+      }
+    });
+
+    memPads.forEach((pad) => {
+      pad.addEventListener("click", () => onPadPress(parseInt(pad.dataset.pad, 10)));
+    });
+
+    /* ——— Level 4 slots ——— */
+    function pickSlotSymbol() {
+      return SLOT_FINAL_POOL[Math.floor(Math.random() * SLOT_FINAL_POOL.length)];
+    }
+
+    function rollRiggedSlotResults() {
+      const r = Math.random();
+      if (r < SLOT_RIGGED_WIN_CHANCE) return [SLOT_WIN, SLOT_WIN, SLOT_WIN];
+      if (r < SLOT_RIGGED_WIN_CHANCE + SLOT_RIGGED_LOSE_CHANCE) {
+        return [SLOT_LOSE, SLOT_LOSE, SLOT_LOSE];
+      }
+      let a;
+      let b;
+      let c;
+      let guard = 0;
+      do {
+        a = pickSlotSymbol();
+        b = pickSlotSymbol();
+        c = pickSlotSymbol();
+        guard += 1;
+      } while (
+        guard < 40 &&
+        ((a === SLOT_WIN && b === SLOT_WIN && c === SLOT_WIN) ||
+          (a === SLOT_LOSE && b === SLOT_LOSE && c === SLOT_LOSE))
+      );
+      return [a, b, c];
+    }
+
+    function waitMs(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    function getReelInner(reelEl) {
+      return reelEl.querySelector(".slot-reel-inner");
+    }
+
+    function setReelSymbol(reelEl, sym) {
+      const inner = getReelInner(reelEl);
+      inner.textContent = sym;
+      reelEl.classList.remove("sym-dollar", "sym-star", "sym-amp", "sym-mix");
+      if (sym === SLOT_WIN) reelEl.classList.add("sym-dollar");
+      else if (sym === SLOT_LOSE) reelEl.classList.add("sym-star");
+      else if (sym === SLOT_NOTHING) reelEl.classList.add("sym-amp");
+      else reelEl.classList.add("sym-mix");
+    }
+
+    function playSlotSound(kind) {
+      const ac = getAudio();
+      const t = ac.currentTime;
+      const beep = (freq, dur, vol = 0.12, type = "square") => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(vol, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(t);
+        osc.stop(t + dur);
+      };
+
+      if (kind === "pull") {
+        beep(90, 0.12, 0.14);
+        beep(60, 0.18, 0.1);
+      } else if (kind === "tick") {
+        beep(280 + Math.random() * 80, 0.04, 0.06);
+      } else if (kind === "stop") {
+        beep(140, 0.1, 0.15);
+        beep(80, 0.14, 0.1);
+      } else if (kind === "one") {
+        beep(523, 0.1, 0.12);
+        beep(659, 0.14, 0.12);
+      } else if (kind === "two") {
+        beep(523, 0.08, 0.12);
+        beep(659, 0.08, 0.12);
+        beep(784, 0.16, 0.14);
+      } else if (kind === "jackpot") {
+        [523, 659, 784, 1047, 1319].forEach((f, i) => beep(f, 0.12, 0.13, "square"));
+        beep(1568, 0.35, 0.16);
+      } else if (kind === "lose") {
+        beep(300, 0.2, 0.14);
+        beep(180, 0.35, 0.12);
+      }
+    }
+
+    function shakeCabinet(level) {
+      slotCabinet.classList.remove("shake-mild", "shake-hard", "shake-jackpot");
+      void slotCabinet.offsetWidth;
+      if (level === "mild") slotCabinet.classList.add("shake-mild");
+      else if (level === "hard") slotCabinet.classList.add("shake-hard");
+      else if (level === "jackpot") slotCabinet.classList.add("shake-jackpot");
+    }
+
+    function isSlotDramaticRun(rigged) {
+      const win = rigged[0] === SLOT_WIN && rigged[1] === SLOT_WIN && rigged[2] === SLOT_WIN;
+      const lose = rigged[0] === SLOT_LOSE && rigged[1] === SLOT_LOSE && rigged[2] === SLOT_LOSE;
+      return win || lose;
+    }
+
+    function getSlotTimings() {
+      const m = Math.max(0.35, Math.min(4, slotSpeedMult));
+      return {
+        tickMs: Math.max(22, Math.round(65 / m)),
+        firstSpinMs: Math.round(1300 / m),
+        betweenReelsMs: Math.round(750 / m)
+      };
+    }
+
+    function applySlotSymbolSpeed(sym, landedBefore) {
+      if (sym !== SLOT_WIN && sym !== SLOT_LOSE) {
+        slotSpeedMult *= 1.5;
+        return;
+      }
+      const hadOther = landedBefore.some((s) => s !== SLOT_WIN && s !== SLOT_LOSE);
+      if (!hadOther) slotSpeedMult *= 0.75;
+    }
+
+    function startReelSpinLoop(reelEl, tickMs) {
+      reelEl.classList.add("spinning");
+      reelEl.classList.remove("reel-land-pop", "reel-match-glow");
+      let tickCount = 0;
+      const interval = setInterval(() => {
+        const s = SLOT_SPIN_SYMBOLS[Math.floor(Math.random() * SLOT_SPIN_SYMBOLS.length)];
+        setReelSymbol(reelEl, s);
+        tickCount += 1;
+        if (tickCount % 2 === 0) playSlotSound("tick");
+      }, tickMs);
+      return interval;
+    }
+
+    function stopReelSpin(reelEl, interval, finalSym) {
+      clearInterval(interval);
+      reelEl.classList.remove("spinning");
+      setReelSymbol(reelEl, finalSym);
+      reelEl.classList.add("reel-land-pop");
+      setTimeout(() => reelEl.classList.remove("reel-land-pop"), 400);
+      playSlotSound("stop");
+    }
+
+    async function handleReelLandDrama(landed, rigged, reelIndex, fast) {
+      if (fast) {
+        if (reelIndex < 2) await waitMs(60);
+        return;
+      }
+
+      const isWinRun =
+        rigged[0] === SLOT_WIN && rigged[1] === SLOT_WIN && rigged[2] === SLOT_WIN;
+      const isLoseRun =
+        rigged[0] === SLOT_LOSE && rigged[1] === SLOT_LOSE && rigged[2] === SLOT_LOSE;
+
+      if (isWinRun) {
+        slotReels[reelIndex].classList.add("reel-match-glow");
+        if (reelIndex === 0) {
+          shakeCabinet("mild");
+          slotReelsRow.classList.add("shake-reels");
+          slotStatus.classList.remove("jackpot-flash");
+          slotStatus.textContent = "ONE IN A ROW...";
+          playSlotSound("one");
+          await waitMs(700);
+        } else if (reelIndex === 1) {
+          shakeCabinet("hard");
+          slotStatus.textContent = "TWO IN A ROW!!";
+          playSlotSound("two");
+          await waitMs(850);
+        } else if (reelIndex === 2) {
+          slotReelsRow.classList.remove("shake-reels");
+          shakeCabinet("jackpot");
+          slotStatus.classList.add("jackpot-flash");
+          slotStatus.textContent = "JACKPOTTTTT!!!";
+          playSlotSound("jackpot");
+          await waitMs(1400);
+        }
+        return;
+      }
+
+      if (isLoseRun && reelIndex === 2) {
+        shakeCabinet("hard");
+        playSlotSound("lose");
+        await waitMs(500);
+        return;
+      }
+
+      if (reelIndex < 2) await waitMs(350);
+    }
+
+    async function playSlotSpinSequence(rigged) {
+      const dramatic = isSlotDramaticRun(rigged);
+      let timings = getSlotTimings();
+      const spinLoops = slotReels.map((reel) => startReelSpinLoop(reel, timings.tickMs));
+      slotCabinet.classList.add("cabinet-active");
+      slotStatus.classList.remove("jackpot-flash");
+      slotReelsRow.classList.toggle("shake-reels", dramatic);
+      slotStatus.textContent = "Spinning...";
+      playSlotSound("pull");
+
+      const landed = [];
+
+      await waitMs(timings.firstSpinMs);
+      stopReelSpin(slotReels[0], spinLoops[0], rigged[0]);
+      applySlotSymbolSpeed(rigged[0], []);
+      landed.push(rigged[0]);
+      await handleReelLandDrama(landed, rigged, 0, !dramatic);
+
+      timings = getSlotTimings();
+      await waitMs(timings.betweenReelsMs);
+      stopReelSpin(slotReels[1], spinLoops[1], rigged[1]);
+      applySlotSymbolSpeed(rigged[1], landed.slice(0, 1));
+      landed.push(rigged[1]);
+      await handleReelLandDrama(landed, rigged, 1, !dramatic);
+
+      timings = getSlotTimings();
+      await waitMs(timings.betweenReelsMs);
+      stopReelSpin(slotReels[2], spinLoops[2], rigged[2]);
+      applySlotSymbolSpeed(rigged[2], landed.slice(0, 2));
+      landed.push(rigged[2]);
+      await handleReelLandDrama(landed, rigged, 2, !dramatic);
+
+      slotReelsRow.classList.remove("shake-reels");
+      slotCabinet.classList.remove("cabinet-active");
+      return landed;
+    }
+
+    function checkSlotResult(results) {
+      const [a, b, c] = results;
+      const line = `${a} ${b} ${c}`;
+
+      if (a === SLOT_WIN && b === SLOT_WIN && c === SLOT_WIN) {
+        setSlotLeverEnabled(false);
+        setTimeout(goToPong, 600);
+        return;
+      }
+      if (a === SLOT_LOSE && b === SLOT_LOSE && c === SLOT_LOSE) {
+        showFail("*** — Instant termination. Start your application over.");
+        return;
+      }
+      if (a === SLOT_NOTHING && b === SLOT_NOTHING && c === SLOT_NOTHING) {
+        slotStatus.classList.remove("jackpot-flash");
+        slotStatus.textContent = "&&& — Nothing happens. Slide the trigger again.";
+        setSlotLeverEnabled(true);
+        return;
+      }
+      slotStatus.classList.remove("jackpot-flash");
+      slotStatus.textContent = `${line} — No jackpot. Slide the trigger again.`;
+      setSlotLeverEnabled(true);
+    }
+
+    function setLeverPull(pull) {
+      leverPull = Math.max(0, Math.min(1, pull));
+      slotLeverKnob.style.top = `${leverPull * LEVER_TRAVEL}px`;
+    }
+
+    function springLeverHome() {
+      slotLeverKnob.classList.add("spring");
+      setLeverPull(0);
+      setTimeout(() => slotLeverKnob.classList.remove("spring"), 380);
+    }
+
+    function setSlotLeverEnabled(on) {
+      slotLeverCol.classList.toggle("disabled", !on);
+    }
+
+    function initSlotLever() {
+      setLeverPull(0);
+      slotLeverKnob.addEventListener("pointerdown", (e) => {
+        if (slotSpinning || slotLeverCol.classList.contains("disabled")) return;
+        leverDragging = true;
+        slotLeverKnob.classList.remove("spring");
+        slotLeverKnob.setPointerCapture(e.pointerId);
+      });
+      slotLeverKnob.addEventListener("pointermove", (e) => {
+        if (!leverDragging) return;
+        const rect = leverTrack.getBoundingClientRect();
+        const y = e.clientY - rect.top - 14;
+        setLeverPull(y / LEVER_TRAVEL);
+      });
+      const endLever = (e) => {
+        if (!leverDragging) return;
+        leverDragging = false;
+        try { slotLeverKnob.releasePointerCapture(e.pointerId); } catch (_) {}
+        const fired = leverPull >= LEVER_FIRE_THRESHOLD;
+        springLeverHome();
+        if (fired && !slotSpinning) pullSlotTrigger();
+      };
+      slotLeverKnob.addEventListener("pointerup", endLever);
+      slotLeverKnob.addEventListener("pointercancel", endLever);
+    }
+
+    async function pullSlotTrigger() {
+      if (slotSpinning) return;
+      slotSpinning = true;
+      setSlotLeverEnabled(false);
+      getAudio();
+
+      const rigged = rollRiggedSlotResults();
+      const results = await playSlotSpinSequence(rigged);
+
+      slotSpinning = false;
+      checkSlotResult(results);
+    }
+
+    function resetSlotsLevel() {
+      slotSpinning = false;
+      slotSpeedMult = 1;
+      leverDragging = false;
+      setSlotLeverEnabled(true);
+      springLeverHome();
+      slotCabinet.classList.remove("cabinet-active", "shake-mild", "shake-hard", "shake-jackpot");
+      slotReelsRow.classList.remove("shake-reels");
+      slotStatus.classList.remove("jackpot-flash");
+      slotReels.forEach((el) => {
+        el.classList.remove("spinning", "reel-land-pop", "reel-match-glow");
+        setReelSymbol(el, "?");
+      });
+      slotStatus.textContent = "Slide the trigger down, then let go.";
+    }
+
+    function goToPong() {
+      showScreen("pong");
+    }
+
+    function goToQuiz() {
+      resetQuizLevel();
+      showScreen("quiz");
+    }
+
+    function stopQuizAudio() {
+      if (quizAudioEl) {
+        quizAudioEl.pause();
+        quizAudioEl.currentTime = 0;
+        quizAudioEl = null;
+      }
+    }
+
+    function clearQuizChoiceEffects() {
+      if (quizChoiceCleanup) {
+        quizChoiceCleanup();
+        quizChoiceCleanup = null;
+      }
+      document.querySelectorAll(".quiz-runaway").forEach((btn) => {
+        btn.classList.remove("quiz-runaway");
+        btn.style.position = "";
+        btn.style.left = "";
+        btn.style.top = "";
+        btn.style.zIndex = "";
+      });
+      quizSpeedClickCount = 0;
+      quizRunawayClickCount = 0;
+    }
+
+    function finishQuizAnswer(correct) {
+      showQuizFeedback(correct);
+
+      if (!correct) {
+        quizWrong += 1;
+        updateQuizStrikesDisplay();
+        if (quizWrong >= QUIZ_MAX_STRIKES) {
+          quizAdvancing = true;
+          clearQuizChoiceEffects();
+          showFail("You got 3 strikes on THE QUIZ. Application terminated.");
+          return;
+        }
+      }
+
+      quizIndex += 1;
+      quizAdvancing = true;
+      clearQuizChoiceEffects();
+      quizAnswersEl.querySelectorAll("button, input").forEach((el) => { el.disabled = true; });
+      setTimeout(advanceQuizAfterFeedback, correct ? 700 : 900);
+    }
+
+    function isQuizChoiceCorrect(q, idx) {
+      if (q.behavior === "hoverSwap") return idx < 3;
+      return checkQuizAnswer(q, idx);
+    }
+
+    function moveQuizButtonRandom(btn) {
+      btn.classList.add("quiz-runaway");
+      const pad = 16;
+      const w = btn.offsetWidth || 160;
+      const h = btn.offsetHeight || 40;
+      const maxX = Math.max(pad, window.innerWidth - w - pad);
+      const maxY = Math.max(pad, window.innerHeight - h - pad);
+      btn.style.left = `${pad + Math.random() * (maxX - pad)}px`;
+      btn.style.top = `${pad + Math.random() * (maxY - pad)}px`;
+    }
+
+    function renderChoiceQuestion(q) {
+      if (q.behavior === "speedTriple") {
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = opt;
+          btn.dataset.quizIdx = String(idx);
+          if (idx === q.answer) {
+            btn.addEventListener("click", () => {
+              if (quizAdvancing) return;
+              quizSpeedClickCount += 1;
+              if (quizSpeedClickCount < 3) {
+                btn.textContent = QUIZ_SPEED_WARNINGS[quizSpeedClickCount - 1];
+                quizFeedbackEl.textContent = QUIZ_SPEED_WARNINGS[quizSpeedClickCount - 1];
+                quizFeedbackEl.classList.remove("ok", "bad");
+                quizFeedbackEl.classList.add("bad");
+                return;
+              }
+              btn.textContent = opt;
+              finishQuizAnswer(true);
+            });
+          } else {
+            btn.addEventListener("click", () => {
+              if (quizAdvancing) return;
+              finishQuizAnswer(false);
+            });
+          }
+          quizAnswersEl.appendChild(btn);
+        });
+        return;
+      }
+
+      if (q.behavior === "hoverSwap") {
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          const defaultLabel = opt;
+          const hoverLabel = idx === 3 ? "PlayStation" : "Xbox";
+          btn.textContent = defaultLabel;
+          btn.dataset.defaultLabel = defaultLabel;
+          btn.dataset.hoverLabel = hoverLabel;
+          btn.addEventListener("mouseenter", () => {
+            btn.textContent = hoverLabel;
+          });
+          btn.addEventListener("mouseleave", () => {
+            btn.textContent = defaultLabel;
+          });
+          btn.addEventListener("click", () => {
+            if (quizAdvancing) return;
+            finishQuizAnswer(isQuizChoiceCorrect(q, idx));
+          });
+          quizAnswersEl.appendChild(btn);
+        });
+        return;
+      }
+
+      if (q.behavior === "runaway") {
+        quizAnswersEl.classList.add("runaway-mode");
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = opt;
+          if (idx === q.answer) {
+            btn.addEventListener("click", () => {
+              if (quizAdvancing) return;
+              quizRunawayClickCount += 1;
+              if (quizRunawayClickCount < 3) {
+                moveQuizButtonRandom(btn);
+                quizFeedbackEl.textContent = `Catch Tripple T! (${quizRunawayClickCount}/3)`;
+                quizFeedbackEl.classList.remove("ok", "bad");
+                return;
+              }
+              finishQuizAnswer(true);
+            });
+          } else {
+            btn.addEventListener("click", () => {
+              if (quizAdvancing) return;
+              finishQuizAnswer(false);
+            });
+          }
+          quizAnswersEl.appendChild(btn);
+        });
+        return;
+      }
+
+      if (q.behavior === "scrambleFlee") {
+        quizAnswersEl.classList.add("scramble-flee");
+        const buttons = q.options.map((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = opt;
+          btn.addEventListener("click", () => {
+            if (quizAdvancing) return;
+            finishQuizAnswer(isQuizChoiceCorrect(q, idx));
+          });
+          quizAnswersEl.appendChild(btn);
+          return btn;
+        });
+
+        const shuffleButtons = () => {
+          const order = buttons.map((_, i) => i);
+          for (let i = order.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [order[i], order[j]] = [order[j], order[i]];
+          }
+          order.forEach((i) => quizAnswersEl.appendChild(buttons[i]));
+        };
+
+        const fleeFromMouse = (e) => {
+          const fleeRadius = 110;
+          const push = 48;
+          buttons.forEach((btn) => {
+            const rect = btn.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const dx = cx - e.clientX;
+            const dy = cy - e.clientY;
+            const dist = Math.hypot(dx, dy);
+            if (dist < fleeRadius && dist > 0) {
+              const scale = push * (1 - dist / fleeRadius);
+              btn.style.transform = `translate(${(dx / dist) * scale}px, ${(dy / dist) * scale}px)`;
+            } else {
+              btn.style.transform = "";
+            }
+          });
+        };
+
+        shuffleButtons();
+        const swapTimer = setInterval(shuffleButtons, 2000);
+        document.addEventListener("mousemove", fleeFromMouse);
+        quizChoiceCleanup = () => {
+          clearInterval(swapTimer);
+          document.removeEventListener("mousemove", fleeFromMouse);
+          buttons.forEach((btn) => { btn.style.transform = ""; });
+        };
+        return;
+      }
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = opt;
+        btn.addEventListener("click", () => {
+          if (quizAdvancing) return;
+          finishQuizAnswer(isQuizChoiceCorrect(q, idx));
+        });
+        quizAnswersEl.appendChild(btn);
+      });
+    }
+
+    function resetQuizLevel() {
+      stopQuizAudio();
+      clearQuizChoiceEffects();
+      quizIndex = 0;
+      quizWrong = 0;
+      quizAdvancing = false;
+      updateQuizStrikesDisplay();
+      renderQuizQuestion();
+    }
+
+    function updateQuizStrikesDisplay() {
+      quizStrikesEl.textContent = `Strikes: ${quizWrong} / ${QUIZ_MAX_STRIKES}`;
+    }
+
+    function checkQuizAnswer(q, value) {
+      if (q.type === "tf") return value === q.answer;
+      if (q.type === "choice") return value === q.answer;
+      if (q.type === "text" && q.match === "applicantName") {
+        return value.trim().toLowerCase() === playerName.trim().toLowerCase();
+      }
+      if (q.type === "text" && q.answer != null) {
+        return value.trim().toLowerCase() === String(q.answer).trim().toLowerCase();
+      }
+      return false;
+    }
+
+    function showQuizFeedback(correct) {
+      quizFeedbackEl.classList.remove("ok", "bad");
+      if (correct) {
+        quizFeedbackEl.textContent = "Correct!";
+        quizFeedbackEl.classList.add("ok");
+      } else {
+        quizFeedbackEl.textContent = "Wrong — that's a strike.";
+        quizFeedbackEl.classList.add("bad");
+      }
+    }
+
+    function advanceQuizAfterFeedback() {
+      quizAdvancing = false;
+      if (quizIndex >= QUIZ_QUESTIONS.length) {
+        goToWin();
+        return;
+      }
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      stopQuizAudio();
+      clearQuizChoiceEffects();
+      const q = QUIZ_QUESTIONS[quizIndex];
+      quizAdvancing = false;
+      if (q.progress) {
+        quizProgressEl.textContent = `Question ${q.progress.n} of ${q.progress.of}`;
+      } else {
+        quizProgressEl.textContent = `Question ${quizIndex + 1} of ${QUIZ_SHOWN_TOTAL}`;
+      }
+      updateQuizStrikesDisplay();
+      quizQuestionNameEl.textContent = q.name || `Question ${quizIndex + 1}`;
+      quizImageWrapEl.innerHTML = "";
+      if (q.image) {
+        const img = document.createElement("img");
+        img.src = q.image;
+        img.alt = "Quiz visual";
+        quizImageWrapEl.appendChild(img);
+      }
+      if (q.audio) {
+        const audio = document.createElement("audio");
+        audio.src = q.audio;
+        audio.preload = "auto";
+        quizAudioEl = audio;
+        const playBtn = document.createElement("button");
+        playBtn.type = "button";
+        playBtn.className = "quiz-audio-play";
+        playBtn.textContent = "▶ PLAY AUDIO";
+        playBtn.addEventListener("click", () => {
+          getAudio();
+          audio.currentTime = 0;
+          audio.play().catch(() => {});
+        });
+        quizImageWrapEl.appendChild(playBtn);
+      }
+      quizPromptEl.textContent = q.prompt;
+      quizFeedbackEl.textContent = "";
+      quizFeedbackEl.classList.remove("ok", "bad");
+      quizAnswersEl.innerHTML = "";
+      quizAnswersEl.classList.remove("row-2");
+
+      if (q.type === "tf") {
+        quizAnswersEl.classList.add("row-2");
+        ["True", "False"].forEach((label) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = label;
+          btn.addEventListener("click", () => submitQuizAnswer(label === "True"));
+          quizAnswersEl.appendChild(btn);
+        });
+        return;
+      }
+
+      if (q.type === "choice") {
+        renderChoiceQuestion(q);
+        return;
+      }
+
+      if (q.type === "text") {
+        const row = document.createElement("div");
+        row.className = "quiz-text-row";
+        const input = document.createElement("input");
+        input.type = "text";
+        input.id = "quiz-text-input";
+        input.autocomplete = "off";
+        input.placeholder = q.audio ? "Type what you hear..." : "Your name";
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = "SUBMIT";
+        const submit = () => submitQuizAnswer(input.value);
+        btn.addEventListener("click", submit);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") submit();
+        });
+        row.appendChild(input);
+        row.appendChild(btn);
+        quizAnswersEl.appendChild(row);
+        input.focus();
+      }
+    }
+
+    function submitQuizAnswer(value) {
+      if (quizAdvancing) return;
+      const q = QUIZ_QUESTIONS[quizIndex];
+      finishQuizAnswer(checkQuizAnswer(q, value));
+    }
+
+    function isPongBotImpossible(s) {
+      return s.scoreP === 4 && s.scoreB < 4;
+    }
+
+    function updatePongScoreboard() {
+      pongScoreEl.textContent = `${pongState.scoreP} — ${pongState.scoreB}`;
+    }
+
+    function resetPongBall(dir) {
+      pongState.ballX = pongState.w / 2;
+      pongState.ballY = pongState.h / 2;
+      pongState.ballVX = 2 * dir;
+      pongState.ballVY = (Math.random() - 0.5) * 2.2;
+    }
+
+    function resetPongLevel() {
+      pongState.scoreP = 0;
+      pongState.scoreB = 0;
+      pongState.playerY = pongState.h / 2 - pongState.paddleH / 2;
+      pongState.botY = pongState.playerY;
+      pongState.ballX = pongState.w / 2;
+      pongState.ballY = pongState.h / 2;
+      pongState.ballVX = 0;
+      pongState.ballVY = 0;
+      pongState.botDir = 1;
+      updatePongScoreboard();
+    }
+
+    function drawPongScene(showStartOverlay) {
+      const s = pongState;
+      pongCtx.fillStyle = "#000";
+      pongCtx.fillRect(0, 0, s.w, s.h);
+      pongCtx.strokeStyle = "#333";
+      pongCtx.setLineDash([6, 8]);
+      pongCtx.beginPath();
+      pongCtx.moveTo(s.w / 2, 0);
+      pongCtx.lineTo(s.w / 2, s.h);
+      pongCtx.stroke();
+      pongCtx.setLineDash([]);
+
+      pongCtx.fillStyle = "#0f0";
+      pongCtx.fillRect(12, s.playerY, s.paddleW, s.paddleH);
+      pongCtx.fillStyle = "#f55";
+      pongCtx.fillRect(s.w - 24, s.botY, s.paddleW, s.paddleH);
+      pongCtx.fillStyle = "#fff";
+      pongCtx.fillRect(s.ballX - 5, s.ballY - 5, 10, 10);
+
+      if (showStartOverlay) {
+        pongCtx.fillStyle = "rgba(0,0,0,0.55)";
+        pongCtx.fillRect(0, 0, s.w, s.h);
+        pongCtx.fillStyle = "#0f0";
+        pongCtx.font = "bold 22px Tahoma, sans-serif";
+        pongCtx.textAlign = "center";
+        pongCtx.fillText("CLICK TO START", s.w / 2, s.h / 2 - 8);
+        pongCtx.font = "14px Tahoma, sans-serif";
+        pongCtx.fillStyle = "#ccc";
+        pongCtx.fillText("First to 5 points wins", s.w / 2, s.h / 2 + 18);
+        pongCtx.textAlign = "left";
+      }
+    }
+
+    function stopPong() {
+      pongRunning = false;
+      pongWaitingStart = true;
+      pongCanvas.classList.add("waiting-start");
+      if (pongAnimId) {
+        cancelAnimationFrame(pongAnimId);
+        pongAnimId = null;
+      }
+    }
+
+    function preparePongScreen() {
+      stopPong();
+      resetPongLevel();
+      pongWaitingStart = true;
+      pongCanvas.classList.add("waiting-start");
+      if (pongHintEl) {
+        pongHintEl.textContent = "Click the court to start. Mouse or W / S — reach 5 before the bot.";
+      }
+      drawPongScene(true);
+    }
+
+    function startPongGame() {
+      if (!pongWaitingStart || pongRunning) return;
+      pongWaitingStart = false;
+      pongRunning = true;
+      pongCanvas.classList.remove("waiting-start");
+      if (pongHintEl) {
+        pongHintEl.textContent = "Mouse or W / S — score 5 points before the bot does.";
+      }
+      getAudio();
+      resetPongBall(Math.random() > 0.5 ? 1 : -1);
+      pongLoop();
+    }
+
+    function pongLoop() {
+      if (!pongRunning) return;
+      const s = pongState;
+      const halfH = s.paddleH / 2;
+
+      if (s.keys.up) s.playerY -= 5;
+      if (s.keys.down) s.playerY += 5;
+      s.playerY = Math.max(0, Math.min(s.h - s.paddleH, s.playerY));
+
+      if (isPongBotImpossible(s)) {
+        s.botY = s.ballY - halfH;
+        s.botY = Math.max(0, Math.min(s.h - s.paddleH, s.botY));
+      } else {
+        s.botY += s.botDir * 2.2;
+        if (s.botY <= 0) {
+          s.botY = 0;
+          s.botDir = 1;
+        } else if (s.botY >= s.h - s.paddleH) {
+          s.botY = s.h - s.paddleH;
+          s.botDir = -1;
+        }
+      }
+
+      s.ballX += s.ballVX;
+      s.ballY += s.ballVY;
+
+      if (s.ballY <= 0 || s.ballY >= s.h) {
+        s.ballVY *= -1;
+        s.ballY = Math.max(0, Math.min(s.h, s.ballY));
+      }
+
+      if (s.ballVX < 0 && s.ballX <= 28) {
+        if (s.ballY >= s.playerY && s.ballY <= s.playerY + s.paddleH) {
+          s.ballVX = Math.abs(s.ballVX) * 1.02;
+          s.ballX = 28;
+          s.ballVY += (s.ballY - (s.playerY + halfH)) * 0.08;
+        } else if (s.ballX < 8) {
+          s.scoreB += 1;
+          updatePongScoreboard();
+          if (s.scoreB >= PONG_TARGET) {
+            stopPong();
+            drawPongScene(true);
+            showFail("The bot reached 5 points. You lose the reflex interview.");
+            return;
+          }
+          resetPongBall(1);
+        }
+      }
+
+      if (s.ballVX > 0 && s.ballX >= s.w - 28) {
+        if (s.ballY >= s.botY && s.ballY <= s.botY + s.paddleH) {
+          s.ballVX = -Math.abs(s.ballVX) * 1.02;
+          s.ballX = s.w - 28;
+          s.ballVY += (s.ballY - (s.botY + halfH)) * 0.08;
+        } else if (s.ballX > s.w - 8) {
+          s.scoreP += 1;
+          updatePongScoreboard();
+          if (s.scoreP >= PONG_TARGET) {
+            stopPong();
+            setTimeout(goToQuiz, 400);
+            return;
+          }
+          resetPongBall(-1);
+        }
+      }
+
+      drawPongScene(false);
+      pongAnimId = requestAnimationFrame(pongLoop);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "w" || e.key === "W" || e.key === "ArrowUp") pongState.keys.up = true;
+      if (e.key === "s" || e.key === "S" || e.key === "ArrowDown") pongState.keys.down = true;
+    });
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "w" || e.key === "W" || e.key === "ArrowUp") pongState.keys.up = false;
+      if (e.key === "s" || e.key === "S" || e.key === "ArrowDown") pongState.keys.down = false;
+    });
+    pongCanvas.addEventListener("click", () => {
+      if (screens.pong.classList.contains("active") && pongWaitingStart) {
+        startPongGame();
+      }
+    });
+
+    pongCanvas.addEventListener("mousemove", (e) => {
+      const rect = pongCanvas.getBoundingClientRect();
+      const scale = pongState.h / rect.height;
+      pongState.playerY = (e.clientY - rect.top) * scale - pongState.paddleH / 2;
+      pongState.playerY = Math.max(0, Math.min(pongState.h - pongState.paddleH, pongState.playerY));
+      if (pongWaitingStart && screens.pong.classList.contains("active")) {
+        drawPongScene(true);
+      }
+    });
+
+    let clickerCount = 0;
+    const clickerCountEl = document.getElementById("clicker-count");
+
+    function resetClicker() {
+      clickerCount = 0;
+      if (clickerCountEl) clickerCountEl.textContent = "0";
+    }
+
+    document.getElementById("clicker-btn").addEventListener("click", () => {
+      clickerCount += 1;
+      clickerCountEl.textContent = String(clickerCount);
+    });
+
+    function goToWin() {
+      const msg = playerName
+        ? `${playerName}, you are provisionally employable.`
+        : "You are provisionally employable.";
+      document.getElementById("win-message").textContent = msg;
+      showScreen("win");
+    }
+
+    function updateAdminSkipUI() {
+      document.querySelectorAll(".admin-skip").forEach((btn) => {
+        btn.classList.toggle("admin-visible", adminModeActive);
+      });
+    }
+
+    function tryAdminSkip(runSkip) {
+      if (!adminModeActive) return;
+      if (!adminPasswordOk) {
+        const pw = prompt("Admin password:");
+        if (pw !== ADMIN_SKIP_PASSWORD) {
+          if (pw != null) alert("Wrong password.");
+          return;
+        }
+        adminPasswordOk = true;
+      }
+      runSkip();
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "]") return;
+      const tag = document.activeElement && document.activeElement.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      adminModeActive = !adminModeActive;
+      updateAdminSkipUI();
+    });
+
+    document.querySelectorAll(".admin-skip").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.skip;
+        tryAdminSkip(() => {
+        if (target === "level0") {
+          playerName = document.getElementById("input-name").value.trim() || "Admin";
+          resetSignageLevel();
+          showScreen("signage");
+        } else if (target === "signage") {
+          resetCaptchaLevel();
+          showScreen("captcha");
+        } else if (target === "captcha") {
+          resetEssayLevel();
+          showScreen("essay");
+        } else if (target === "essay") {
+          resetMemoryLevel();
+          showScreen("memory");
+        } else if (target === "memory") {
+          goToSlots();
+        } else if (target === "slots") {
+          goToPong();
+        } else if (target === "pong") {
+          goToQuiz();
+        } else if (target === "quiz") {
+          goToWin();
+        }
+        });
+      });
+    });
+
+    document.getElementById("btn-start").addEventListener("click", () => {
+      resetLevel0();
+      showScreen("level0");
+    });
+
+    document.getElementById("btn-replay").addEventListener("click", restartFromBeginning);
+
+    resetSignatureCanvas();
+    pickRequiredSignColor();
+    updateSignageDesc();
+    buildWordCloud();
+    selectBlackInk();
+    updateAdminSkipUI();
+    updateEssayWordCount();
+    buildMemoryProgress();
+    resetCaptchaLevel();
+    resetSlotsLevel();
+    resetQuizLevel();
+    initSlotLever();
+    preparePongScreen();
+  </script>
+</body>
+</html>

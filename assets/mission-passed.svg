@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="640" height="360" fill="#1a3d1a"/>
+  <rect x="40" y="40" width="560" height="280" fill="#0d260d" stroke="#3cff3c" stroke-width="4"/>
+  <text x="320" y="120" fill="#3cff3c" font-family="Arial Black, sans-serif" font-size="42" text-anchor="middle">MISSION PASSED</text>
+  <text x="320" y="180" fill="#b8ffb8" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">Respect +</text>
+  <text x="320" y="260" fill="#ffffff" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">You looked the other way.</text>
+</svg>
